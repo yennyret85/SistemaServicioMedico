@@ -198,7 +198,7 @@ class UsersController extends Controller
         }
 
         return redirect('/users')->with('mensaje', 'Usuario actualizado satisfactoriamente');
-    } //AQUI EL RETURN PUEDO CAMBIARLO PARA QUE DE ACUERDO AL ROL DE LA PERSONA ME REDIRIJA  A LA PAGINA DE INDEX DE ESE ROL.
+    } //*
 
     /**
      * Remove the specified resource from storage.
@@ -209,6 +209,29 @@ class UsersController extends Controller
 
     public function destroy($id)
     {
-        //
+        if(!Auth::user()->can('EliminarUsuario'))
+            abort(403, 'Permiso Denegado.');
+
+        User::destroy($id);
+        return redirect('/users')->with('mensaje', 'Usuario eliminado satisfactoriamente');
+    }
+
+    public function permissions($id)
+    {
+        if(!Auth::user()->can('PermisosUsuario'))
+            abort(403, 'Permiso Denegado.');
+
+        $user = User::findOrFail($id);
+        $permisos = Permission::all();
+        return view('users.permissions', ['user' => $user, 'permissions' => $permissions]);
+    }
+
+    public function assignPermissions(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->revokePermissionTo(Permission::all());
+        if ($request->input('permissions'))
+            $user->givePermissionTo($request->input('permissions'));
+        return redirect('/users')->with('mensaje', 'Permisos Asignados Satisfactoriamente');
     }
 }
