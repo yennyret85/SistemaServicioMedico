@@ -156,21 +156,21 @@ class RolesController extends Controller
         return redirect('/roles')->with('mensaje', 'Role ha sido eliminado con exito');
     }
 
-    public function permisos($id){
-        if(!Auth::user()->can('PermisosRole'))
+    public function permissions($id){
+        if(!Auth::user()->can('asignarPermisos'))
             abort(403);
 
         $role = Role::findOrFail($id);
-        $permisos = Permission::all();
-        return view('roles.permisos', ['role'=>$role, 'permisos'=>$permisos]);
+        $permissions = Permission::all();
+        return view('roles.permissions', ['role'=>$role, 'permissions'=>$permissions]);
     }
 
     public function asignarPermisos(Request $request, $id){
         $role = Role::findOrFail($id);
         $role->revokePermissionTo(Permission::all());
-        if($request->input('permisos'))
-            $role->givePermissionTo($request->input('permisos'));
+        if($request->input('permissions'))
+            $role->givePermissionTo($request->input('permissions'));
         return redirect('/roles')->with('mensaje', 'Permisos Asignados Satisfactoriamente');
     }
-    
+
 }

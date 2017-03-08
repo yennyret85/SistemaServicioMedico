@@ -58,7 +58,7 @@ class PermissionsController extends Controller
             \DB::commit();
         }
 
-        return redirect('/permisos')->with('mensaje', 'Permiso ha sido creado con exito');
+        return redirect('/permissions')->with('mensaje', 'Permiso ha sido creado con exito');
     }
 
     /**
@@ -115,7 +115,7 @@ class PermissionsController extends Controller
             \DB::commit();
         }
 
-        return redirect('/permisos')->with('mensaje', 'Permiso ha sido editado con exito');
+        return redirect('/permissions')->with('mensaje', 'Permiso ha sido editado con exito');
     }
 
     /**
@@ -134,6 +134,6 @@ class PermissionsController extends Controller
         }finally{
             \DB::commit();
         }
-        return redirect('/permisos')->with('mensaje', 'Permiso ha sido eliminado con exito');
+        return redirect('/permissions')->with('mensaje', 'Permiso ha sido eliminado con exito');
     }
 }

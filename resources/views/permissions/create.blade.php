@@ -8,7 +8,7 @@
                     <div class="panel-heading">Crear Permiso</div>
 
                     <div class="panel-body">
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/permisos') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/permissions') }}">
                             {{ method_field('POST') }}
                             {{ csrf_field() }}
 

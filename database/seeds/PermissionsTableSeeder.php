@@ -125,6 +125,12 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
+            'name' => 'RolesUsuario',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('permissions')->insert([
             'name' => 'CrearRol',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),

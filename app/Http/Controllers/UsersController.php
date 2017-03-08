@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -36,7 +37,7 @@ class UsersController extends Controller
     
     public function create()
     {
-        if(!Auth::user()->can('CrearUsuario'))
+        if(!Auth::user()->can('RegistrarUsuario'))
             abort(403, 'Acceso Prohibido');
 
         $roles = Role::all();
@@ -60,7 +61,7 @@ class UsersController extends Controller
             'sex' => 'required|max:1',
             'birtdate' => 'required|date',
             'phone' => 'max:255',
-            'cellphone' => 'max:255',
+            'cellphone' => 'required|max:255',
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
@@ -86,7 +87,7 @@ class UsersController extends Controller
                 'address' => $request->textarea('address'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
-                'specialty_id' => $request->input('specialty'),
+                'specialty_id' => ($request->input('specialty')!='')?$request->input('specialty'):NULL,
             ]);
 
             $user->assignRole($request->input('role'));
@@ -96,7 +97,7 @@ class UsersController extends Controller
         } finally {
             \DB::commit();
         }
-        return redirect('/users')->with('mensaje', 'Usuario creado satisfactoriamente');
+        return redirect('/home')->with('mensaje', 'Usuario creado satisfactoriamente');
     }
 
     /**
@@ -144,7 +145,7 @@ class UsersController extends Controller
             'sex' => 'required|max:1',
             'birtdate' => 'required|date',
             'phone' => 'max:255',
-            'cellphone' => 'max:255',
+            'cellphone' => 'required|max:255',
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$id.',id',
             'role' => 'required',
@@ -213,20 +214,20 @@ class UsersController extends Controller
             abort(403, 'Permiso Denegado.');
 
         User::destroy($id);
-        return redirect('/users')->with('mensaje', 'Usuario eliminado satisfactoriamente');
+        return redirect('/home')->with('mensaje', 'Usuario eliminado satisfactoriamente');
     }
 
     public function permissions($id)
     {
-        if(!Auth::user()->can('PermisosUsuario'))
+        if(!Auth::user()->can('AsignarPermiso'))
             abort(403, 'Permiso Denegado.');
 
         $user = User::findOrFail($id);
-        $permisos = Permission::all();
+        $permission = Permission::all();
         return view('users.permissions', ['user' => $user, 'permissions' => $permissions]);
     }
 
-    public function assignPermissions(Request $request, $id)
+    public function asignarPermisos(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $user->revokePermissionTo(Permission::all());
@@ -234,4 +235,12 @@ class UsersController extends Controller
             $user->givePermissionTo($request->input('permissions'));
         return redirect('/users')->with('mensaje', 'Permisos Asignados Satisfactoriamente');
     }
+
+    public function patients()
+    {
+        $patients = User::role('Paciente')->paginate();
+        return view('patients.index', ['users' => $patients]);
+    }
 }
+
+    

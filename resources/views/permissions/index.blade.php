@@ -20,7 +20,7 @@
                     <div class="panel-body">
                         Listado de Permisos
 
-                        <a href="{{ url('/permisos/create') }}" class="btn btn-success">
+                        <a href="{{ url('/permissions/create') }}" class="btn btn-success">
                             <i class="fa fa-user"></i> Nuevo Permiso
                         </a>
 
@@ -33,13 +33,13 @@
                                 <tr>
                                     <td>{{ $per->name }}</td>
                                     <td>
-                                        <a href="{{ url('permisos/'.$per->id.'/edit') }}" class="btn btn-primary">
+                                        <a href="{{ url('permissions/'.$per->id.'/edit') }}" class="btn btn-primary">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
                                     <td>
                                         <button class="btn btn-danger"
-                                                data-action="{{ url('/permisos/'.$per->id) }}"
+                                                data-action="{{ url('/permissions/'.$per->id) }}"
                                                 data-name="{{ $per->name }}"
                                                 data-toggle="modal" data-target="#confirm-delete">
                                             <i class="fa fa-trash fa-1x"></i>

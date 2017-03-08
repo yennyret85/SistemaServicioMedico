@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
@@ -37,7 +37,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        {{ config('app.name') }}
                     </a>
                 </div>
 
@@ -55,11 +55,13 @@
                             <li><a href="{{ url('/register') }}">Registrar</a></li>
                         @else
                             <li><a href="{{ url('/roles') }}">Roles</a></li>
-                            <li><a href="{{ url('/permisos') }}">Permisos</a></li>
+                            <li><a href="{{ url('/permissions') }}">Permisos</a></li>
+                            <li><a href="{{ url('/users') }}">Usuarios</a></li>
+
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ Auth::user()->name . " " . Auth::user()->lastname }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
@@ -87,5 +89,22 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+
+    <script type="application/javascript"> //Script para Eliminar Usuarios
+        $('#confirm-delete').on('show.bs.modal', function (e) {
+            $(this).find('.form-delete').attr('action', $(e.relatedTarget).data('action'));
+            $(this).find('.name').text($(e.relatedTarget).data('name'));
+            });
+    </script>
+
+    <script> //Script para mostrar Div de Especialidad.
+        $('#role').on('change', function (e){
+            if ($(e.target).val()=='Medico'){
+                $('#spetialtyDiv').show();
+            }else {
+                $('#spetialtyDiv').hide();
+            }
+        });
+    </script>
 </body>
 </html>

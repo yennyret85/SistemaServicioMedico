@@ -5,9 +5,10 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registro del Paciente</div>
+                <div class="panel-heading">Registro de Usuarios</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/users') }}">
+                        {{ method_field('POST') }}
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -167,6 +168,52 @@
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Registrar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
+                            <label for="role" class="col-md-4 control-label">Rol</label>
+
+                            <div class="col-md-6">
+                                <select name="role" id="role" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('role'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('role') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div id="specialtyDiv" class="form-group{{ $errors->has('specialty') ? ' has-error' : '' }}" style="display: none">
+                            <label for="specialty" class="col-md-4 control-label">Especialidad</label>
+
+                            <div class="col-md-6">
+                                <select name="specialty" id="specialty" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    @foreach($specialties as $specialty)
+                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('specialty'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('specialty') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Guardar
                                 </button>
                             </div>
                         </div>
