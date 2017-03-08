@@ -18,3 +18,44 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::group(['middleware' => ['role:Administrador']], function () {
+    Route::resource('/users', 'UsersController');
+    //Route::resource('/roles', 'RolesController');
+    //Route::resource('/permisos', 'PermissionsController');
+    });
+    
+/*
+    Route::resource('/cursos', 'CursosController');
+    Route::get('/roles/{id}/permisos','RolesController@permisos');
+    Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');
+    Route::get('/usuarios/{id}/permisos','UsersController@permisos');
+    Route::put('/usuarios/{id}/asignarpermisos','UsersController@asignarPermisos');
+    Route::get('/cursosdisponibles', 'HomeController@cursosdisponibles');
+    Route::get('/miscursos', 'HomeController@miscursos');
+    Route::get('/cursos/{id}/postular', 'CursosController@postular');
+
+}); //Cuando lo descomente tengo que eliminar el q esta arriba!!!
+
+Route::group(['middleware' => ['role:Medico']], function () {
+    //
+});
+
+Route::group(['middleware' => ['role:Paciente']], function () {
+    //
+});
+
+Route::group(['middleware' => ['role:Secretaria']], function () {
+    //
+});
+
+Route::group(['middleware' => ['role:Farmaceuta']], function () {
+    //
+});
+
+//Route::group(['middleware' => ['role:Alumno']], function () {
+    //Route::get('/cursosdisponibles', 'HomeController@cursosdisponibles');
+    //Route::get('/miscursos', 'HomeController@miscursos');
+    //Route::get('/cursos(id)/postular', 'CursosController@postular');
+//});
+*/

@@ -12,7 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+    <link href="/css/font-awesome.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -54,6 +54,10 @@
                             <li><a href="{{ url('/login') }}">Acceder</a></li>
                             <li><a href="{{ url('/register') }}">Registrar</a></li>
                         @else
+                            @hasrole('Administrador')
+                                <li><p>hola</p></li>
+                            @endhasrole
+                           
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>

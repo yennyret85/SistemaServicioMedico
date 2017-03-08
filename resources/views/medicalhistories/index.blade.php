@@ -1,0 +1,1 @@
+<h1>Vista Historias Médicas</h1>
