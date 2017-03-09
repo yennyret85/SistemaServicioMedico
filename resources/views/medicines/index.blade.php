@@ -2,6 +2,6 @@
 
 @section('content')
 	<div class="container">
-		<h1>Listado de Pacientes</h1>
+		<h1>Listado de Medicinas</h1>
 	</div>
 @endsection

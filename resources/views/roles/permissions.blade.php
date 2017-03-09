@@ -2,6 +2,17 @@
 
 @section('content')
     <div class="container">
+        @if(session('mensaje'))
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <strong>Información:</strong> {{ session('mensaje') }}.
+                    </div>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
@@ -18,7 +29,7 @@
 
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control" name="name"
-                                           value="{{ $role->name or old('name') }}" autofocus readonly>
+                                           value="{{ $role->name or old('name') }}">
                                     @if($errors->has('name'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('name') }}</strong>

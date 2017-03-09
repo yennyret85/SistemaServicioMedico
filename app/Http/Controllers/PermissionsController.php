@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
 use Validator;
 
 class PermissionsController extends Controller
@@ -54,6 +56,7 @@ class PermissionsController extends Controller
 
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/permissions')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
@@ -111,6 +114,7 @@ class PermissionsController extends Controller
 
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/permissions')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
@@ -131,6 +135,7 @@ class PermissionsController extends Controller
             Permission::destroy($id);
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/permissions')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }

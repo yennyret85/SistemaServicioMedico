@@ -18,17 +18,23 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
-
 Route::resource('/roles', 'RolesController');
 Route::resource('/permissions', 'PermissionsController');
-Route::resource('/users', 'UsersController@index');
+Route::resource('/users', 'UsersController');
+
+
+Route::get('/users/create','UsersController@create');
+Route::get('/patients','UsersController@patients');
+Route::get('/employees','UsersController@employees');
+
+Route::get('/users/{id}/permissions','UsersController@permissions');
+Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');
+
 
 Route::get('/roles/{id}/permissions','RolesController@permissions');
 Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');
-Route::get('/users/{id}/permissions','UsersController@permissions');
-//Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');
 
-//Route::get('/patients', 'UsersController@patients');
+
 
 
     

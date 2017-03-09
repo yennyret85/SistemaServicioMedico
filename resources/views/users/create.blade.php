@@ -2,10 +2,23 @@
 
 @section('content')
 <div class="container">
+    <div class="container">
+        @if(session('mensaje'))
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <strong>Información:</strong> {{ session('mensaje') }}.
+                    </div>
+                </div>
+            </div>
+        @endif
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registro de Usuarios</div>
+                <div class="panel-heading">Crear Usuario</div>
+                
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/users') }}">
                         {{ method_field('POST') }}
@@ -164,14 +177,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Registrar
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
                             <label for="role" class="col-md-4 control-label">Rol</label>
 
@@ -179,7 +184,9 @@
                                 <select name="role" id="role" class="form-control">
                                     <option value="">Seleccione</option>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                        <option value="{{ $role->name }}">
+                                        <!-- @if(old('role')==$role->name) selected @endif -->
+                                        {{ $role->name }}</option>
                                     @endforeach
                                 </select>
 
@@ -198,12 +205,20 @@
                                 <select name="specialty" id="specialty" class="form-control">
                                     <option value="">Seleccione</option>
                                     @foreach($specialties as $specialty)
-                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                        <option value="{{ $specialty->id }}">
+                                        <!-- @if(old('specialty')==$specialty->name) selected @endif -->
+                                        {{ $specialty->name }}</option>
+                                    @endforeach
+
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->name }}" 
+                                        @if(old('role')==$role->name) selected @endif>
+                                        {{ $role->name }}</option>
                                     @endforeach
                                 </select>
 
                                 @if ($errors->has('specialty'))
-                                    <span class="help-block">
+                                <span class="help-block">
                                     <strong>{{ $errors->first('specialty') }}</strong>
                                 </span>
                                 @endif

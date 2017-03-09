@@ -51,14 +51,39 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">Acceder</a></li>
-                            <li><a href="{{ url('/register') }}">Registrar</a></li>
+                        <li><a href="{{ url('/login') }}">Acceder</a></li>
+                        <li><a href="{{ url('/register') }}">Registrarse</a></li>
                         @else
-                            <li><a href="{{ url('/roles') }}">Roles</a></li>
-                            <li><a href="{{ url('/permissions') }}">Permisos</a></li>
-                            <li><a href="{{ url('/users') }}">Usuarios</a></li>
-
-
+                            @hasrole ('Administrador')
+                                <li><a href="{{ url('/patients') }}">Pacientes</a></li>
+                                <li><a href="{{ url('/users') }}">Empleados</a></li>
+                                <li><a href="{{ url('/recipes') }}">Recipes</a></li>
+                                <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
+                                <li><a href="{{ url('/appointments') }}">Citas</a></li>
+                                <li><a href="{{ url('/roles') }}">Roles</a></li>
+                                <li><a href="{{ url('/permissions') }}">Permisos</a></li>
+                                <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
+                                <li><a href="{{ url('/especialties') }}">Especialidades</a></li>
+                            @endhasrole
+                            @hasrole('Secretaria')
+                            <li><a href="{{ url('/appointments') }}">Citas</a></li>
+                            <li><a href="{{ url('/patients') }}">Pacientes</a></li>
+                            <li><a href="{{ url('/doctors') }}">Médicos</a></li>
+                            @endhasrole
+                            @hasrole('Medico')
+                                <li><a href="{{ url('/appointments') }}">Citas</a></li>
+                                <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
+                                <li><a href="{{ url('/recipes') }}">Recipes</a></li>
+                                <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
+                            @endhasrole
+                            @hasrole('Farmaceuta')
+                                <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
+                                <li><a href="{{ url('/recipes') }}">Recipes</a></li>
+                            @endhasrole
+                            @hasrole('Paciente')
+                                <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>
+                            @endhasrole
+                            
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name . " " . Auth::user()->lastname }} <span class="caret"></span>
@@ -100,9 +125,9 @@
     <script> //Script para mostrar Div de Especialidad.
         $('#role').on('change', function (e){
             if ($(e.target).val()=='Medico'){
-                $('#spetialtyDiv').show();
+                $('#specialtyDiv').show();
             }else {
-                $('#spetialtyDiv').hide();
+                $('#specialtyDiv').hide();
             }
         });
     </script>

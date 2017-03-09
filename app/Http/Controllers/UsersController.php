@@ -84,7 +84,7 @@ class UsersController extends Controller
                 'birtdate' => $request->input('birtdate'),
                 'phone' => $request->input('phone'),
                 'cellphone' => $request->input('cellphone'),
-                'address' => $request->textarea('address'),
+                'address' => $request->input('address'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
                 'specialty_id' => ($request->input('specialty')!='')?$request->input('specialty'):NULL,
@@ -94,10 +94,11 @@ class UsersController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
-        return redirect('/home')->with('mensaje', 'Usuario creado satisfactoriamente');
+        return redirect('/users')->with('mensaje', 'Usuario creado satisfactoriamente');
     }
 
     /**
@@ -169,7 +170,7 @@ class UsersController extends Controller
                 'birtdate' => $request->input('birtdate'),
                 'phone' => $request->input('phone'),
                 'cellphone' => $request->input('cellphone'),
-                'address' => $request->textarea('address'),
+                'address' => $request->input('address'),
                 'email' => $request->input('email'),
                 'specialty_id' => $request->input('specialty'),
             ]);
@@ -194,10 +195,10 @@ class UsersController extends Controller
         }catch (\Exception $e){
             echo $e->getMessage();
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
-
         return redirect('/users')->with('mensaje', 'Usuario actualizado satisfactoriamente');
     } //*
 
@@ -214,7 +215,7 @@ class UsersController extends Controller
             abort(403, 'Permiso Denegado.');
 
         User::destroy($id);
-        return redirect('/home')->with('mensaje', 'Usuario eliminado satisfactoriamente');
+        return redirect('/users')->with('mensaje', 'Usuario eliminado satisfactoriamente');
     }
 
     public function permissions($id)
@@ -223,7 +224,7 @@ class UsersController extends Controller
             abort(403, 'Permiso Denegado.');
 
         $user = User::findOrFail($id);
-        $permission = Permission::all();
+        $permissions = Permission::all();
         return view('users.permissions', ['user' => $user, 'permissions' => $permissions]);
     }
 
@@ -241,6 +242,7 @@ class UsersController extends Controller
         $patients = User::role('Paciente')->paginate();
         return view('patients.index', ['users' => $patients]);
     }
+
 }
 
     

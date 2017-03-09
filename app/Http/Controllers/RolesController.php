@@ -69,6 +69,7 @@ class RolesController extends Controller
 
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
@@ -130,6 +131,7 @@ class RolesController extends Controller
 
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/roles')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
@@ -150,6 +152,7 @@ class RolesController extends Controller
             Role::destroy($id);
         }catch(\Exception $e){
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
