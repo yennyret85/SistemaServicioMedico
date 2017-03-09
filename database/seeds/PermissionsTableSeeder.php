@@ -30,19 +30,13 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'name' => 'EditarUsuario',
+            'name' => 'EditarPaciente',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
         ]);
 
         DB::table('permissions')->insert([
             'name' => 'ModuloSecretaria',
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'RegistrarUsuario',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
         ]);
@@ -53,7 +47,13 @@ class PermissionsTableSeeder extends Seeder
             'updated_at' => \Carbon\Carbon::now(),
         ]);
 
-         DB::table('permissions')->insert([
+        DB::table('permissions')->insert([
+            'name' => 'EditarCita',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('permissions')->insert([
             'name' => 'CambiarStatusCita',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
@@ -102,6 +102,12 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
+            'name' => 'VerRecipe',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('permissions')->insert([
             'name' => 'CrearRecipe',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
@@ -126,12 +132,6 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'name' => 'VerRecipe',
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now(),
-        ]);
-
-        DB::table('permissions')->insert([
             'name' => 'CambiarStatusRecipe',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
@@ -139,6 +139,30 @@ class PermissionsTableSeeder extends Seeder
 
         DB::table('permissions')->insert([
             'name' => 'ModuloAdministrador',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('permissions')->insert([
+            'name' => 'RegistrarUsuario',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('permissions')->insert([
+            'name' => 'EditarUsuario',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+        
+        DB::table('permissions')->insert([
+            'name' => 'EliminarUsuario',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+        
+        DB::table('permissions')->insert([
+            'name' => 'RolesUsuario',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
         ]);
@@ -180,27 +204,27 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         DB::table('permissions')->insert([
-            'name' => 'EliminarPermiso',
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now(),
-        ]);
-        
-        DB::table('permissions')->insert([
             'name' => 'AsignarPermiso',
-            'created_at' => \Carbon\Carbon::now(),
-            'updated_at' => \Carbon\Carbon::now(),
-        ]);
-        
-        DB::table('permissions')->insert([
-            'name' => 'EliminarUsuario',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
         ]);
 
         DB::table('permissions')->insert([
+            'name' => 'EliminarPermiso',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+      
+        DB::table('permissions')->insert([
             'name' => 'EliminarHistoriaMedica',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
         ]);
-    }
+
+        DB::table('permissions')->insert([
+            'name' => 'EliminarCita',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+    } //34 Permisos
 }

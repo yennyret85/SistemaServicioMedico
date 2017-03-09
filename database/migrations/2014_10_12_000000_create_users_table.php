@@ -21,12 +21,13 @@ class CreateUsersTable extends Migration
             $table->enum('sex',array('f','m'));
             $table->date('birtdate');
             $table->string('phone')->nullable();
-            $table->string('cellphone')->nullable();
-            $table->string('address')->nullable();
+            $table->string('cellphone');
+            $table->text('address')->nullable();
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

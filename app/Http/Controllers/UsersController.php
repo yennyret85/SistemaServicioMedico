@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -36,7 +37,7 @@ class UsersController extends Controller
     
     public function create()
     {
-        if(!Auth::user()->can('CrearUsuario'))
+        if(!Auth::user()->can('RegistrarUsuario'))
             abort(403, 'Acceso Prohibido');
 
         $roles = Role::all();
@@ -60,7 +61,7 @@ class UsersController extends Controller
             'sex' => 'required|max:1',
             'birtdate' => 'required|date',
             'phone' => 'max:255',
-            'cellphone' => 'max:255',
+            'cellphone' => 'required|max:255',
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
@@ -83,16 +84,17 @@ class UsersController extends Controller
                 'birtdate' => $request->input('birtdate'),
                 'phone' => $request->input('phone'),
                 'cellphone' => $request->input('cellphone'),
-                'address' => $request->textarea('address'),
+                'address' => $request->input('address'),
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
-                'specialty_id' => $request->input('specialty'),
+                'specialty_id' => ($request->input('specialty')!='')?$request->input('specialty'):NULL,
             ]);
 
             $user->assignRole($request->input('role'));
 
         } catch (\Exception $e) {
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
@@ -144,7 +146,7 @@ class UsersController extends Controller
             'sex' => 'required|max:1',
             'birtdate' => 'required|date',
             'phone' => 'max:255',
-            'cellphone' => 'max:255',
+            'cellphone' => 'required|max:255',
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$id.',id',
             'role' => 'required',
@@ -168,7 +170,7 @@ class UsersController extends Controller
                 'birtdate' => $request->input('birtdate'),
                 'phone' => $request->input('phone'),
                 'cellphone' => $request->input('cellphone'),
-                'address' => $request->textarea('address'),
+                'address' => $request->input('address'),
                 'email' => $request->input('email'),
                 'specialty_id' => $request->input('specialty'),
             ]);
@@ -193,10 +195,10 @@ class UsersController extends Controller
         }catch (\Exception $e){
             echo $e->getMessage();
             \DB::rollback();
+            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
-
         return redirect('/users')->with('mensaje', 'Usuario actualizado satisfactoriamente');
     } //*
 
@@ -218,15 +220,15 @@ class UsersController extends Controller
 
     public function permissions($id)
     {
-        if(!Auth::user()->can('PermisosUsuario'))
+        if(!Auth::user()->can('AsignarPermiso'))
             abort(403, 'Permiso Denegado.');
 
         $user = User::findOrFail($id);
-        $permisos = Permission::all();
+        $permissions = Permission::all();
         return view('users.permissions', ['user' => $user, 'permissions' => $permissions]);
     }
 
-    public function assignPermissions(Request $request, $id)
+    public function asignarPermisos(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $user->revokePermissionTo(Permission::all());
@@ -234,4 +236,13 @@ class UsersController extends Controller
             $user->givePermissionTo($request->input('permissions'));
         return redirect('/users')->with('mensaje', 'Permisos Asignados Satisfactoriamente');
     }
+
+    public function patients()
+    {
+        $patients = User::role('Paciente')->paginate();
+        return view('patients.index', ['users' => $patients]);
+    }
+
 }
+
+    
