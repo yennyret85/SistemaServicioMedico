@@ -12,7 +12,7 @@
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+    <link href="/css/font-awesome.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -83,7 +83,6 @@
                             @hasrole('Paciente')
                                 <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>
                             @endhasrole
-                            
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name . " " . Auth::user()->lastname }} <span class="caret"></span>

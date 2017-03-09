@@ -33,8 +33,3 @@ Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');
 
 Route::get('/roles/{id}/permissions','RolesController@permissions');
 Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');
-
-
-
-
-    
