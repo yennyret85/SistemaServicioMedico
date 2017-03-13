@@ -195,7 +195,7 @@
                                     <span class="help-block">
                                     <strong>{{ $errors->first('role') }}</strong>
                                 </span>
-                                @endif
+                            @endif
                             </div>
                         </div>
                         @endif

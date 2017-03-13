@@ -23,9 +23,19 @@ Route::resource('/permissions', 'PermissionsController');
 Route::resource('/users', 'UsersController');
 Route::resource('/appointments', 'AppointmentsController');
 
-Route::get('/patients','UsersController@patients'); //Ver mis citas del Paciente
+Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
+Route::get('/myappointments', 'AppointmentsController@vermiscitas');
+
+
 
 Route::get('/users/{id}/permissions','UsersController@permissions');
 Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');
+
 Route::get('/roles/{id}/permissions','RolesController@permissions');
 Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');
+
+Route::get('/appointments/{id}/status', 'AppointmentsController@vistastatus');
+Route::put('/appointments/{id}/status', 'AppointmentsController@cambiarstatus');
+
+
+

@@ -28,10 +28,10 @@
                             <label for="patient" class="col-md-4 control-label">Paciente</label>
 
                             <div class="col-md-6">
-                            <select name="patient" id="patient" class="form-control">
+                            <select name="patient" id="patient" class="form-control" data-live-search="true">
                                 <option value="">Seleccione</option>
                                 @foreach($patients as $patient)
-                                    <option value="{{ $patient->id }}" @if(old('patient')==$patient->id) selected @endif> {{ $patient->name}} {{ $patient->lastname}}</option>
+                                    <option value="{{ $patient->id }}" @if(old('patient')==$patient->id) selected @endif> {{ $patient->name." ".$patient->lastname." | C.I. ".$patient->idcard}}</option>
                                 @endforeach
                             </select>
 
@@ -43,33 +43,14 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('specialty') ? ' has-error' : '' }}">
-                            <label for="specialty" class="col-md-4 control-label">Especialidad</label>
-
-                            <div class="col-md-6">
-                            <select name="specialty" id="specialty" class="form-control">
-                                <option value="">Seleccione</option>
-                                @foreach($specialties as $specialty)
-                                    <option value="{{ $specialty->id }}" @if(old('specialty')==$specialty->id) selected @endif> {{ $specialty->name}} {{ $specialty->lastname}}</option>
-                                @endforeach
-                            </select>
-
-                            @if ($errors->has('specialty'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('specialty') }}</strong>
-                                </span>
-                            @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('doctor') ? ' has-error' : '' }}">
                             <label for="doctor" class="col-md-4 control-label">Médico</label>
 
                             <div class="col-md-6">
-                            <select name="doctor" id="doctor" class="form-control">
+                            <select name="doctor" id="doctor" class="form-control" data-live-search="true">
                                 <option value="">Seleccione</option>
                                 @foreach($doctors as $doctor)
-                                    <option value="{{ $doctor->id }}" @if(old('doctor')==$doctor->id) selected @endif> {{ $doctor->name}} {{ $doctor->lastname}}</option>
+                                    <option value="{{ $doctor->id }}" @if(old('doctor')==$doctor->id) selected @endif> {{ $doctor->name." ".$doctor->lastname." (".$doctor->specialty->name.")"}}</option>
                                 @endforeach
                             </select>
 

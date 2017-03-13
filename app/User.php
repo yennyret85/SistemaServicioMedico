@@ -37,9 +37,14 @@ class User extends Authenticatable
         return $this->belongsTo('App\Specialty', 'specialty_id');
     }
 
-    public function appointment()
+    public function appointments_patient()
     {
-        return $this->hasMany('App\Appointment', 'appointment_id');
+        return $this->hasMany('App\Appointment', 'patient_id');
+    }
+
+public function appointments_doctor()
+    {
+        return $this->hasMany('App\Appointment', 'doctor_id');
     }
 
     public function recipe()

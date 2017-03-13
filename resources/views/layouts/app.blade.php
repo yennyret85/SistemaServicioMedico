@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/bootstrap-select.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -81,7 +82,7 @@
                                 <li><a href="{{ url('/recipes') }}">Recipes</a></li>
                             @endhasrole
                             @hasrole('Paciente')
-                                <li><a href="{{ url('/patients') }}">Mis Citas</a></li>
+                                <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>
                             @endhasrole
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -112,22 +113,27 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    
+    <script src="/js/bootstrap-select.js"></script>
 
     <script type="application/javascript"> //Script para Eliminar Usuarios
         $('#confirm-delete').on('show.bs.modal', function (e) {
             $(this).find('.form-delete').attr('action', $(e.relatedTarget).data('action'));
             $(this).find('.name').text($(e.relatedTarget).data('name'));
             });
-    </script>
 
-    <script> //Script para mostrar Div de Especialidad.
-        $('#role').on('change', function (e){
+        $('#role').on('change', function (e){ //Script para mostrar Div de Especialidad.
             if ($(e.target).val()=='Medico'){
                 $('#specialtyDiv').show();
             }else {
                 $('#specialtyDiv').hide();
             }
         }).trigger('change');
+
+        $('select').selectpicker({ // Usar selectpicker.
+              style: 'btn-default btn-outline',
+              size: 4
+            });
     </script>
 </body>
 </html>

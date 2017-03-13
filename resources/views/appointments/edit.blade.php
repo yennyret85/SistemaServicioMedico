@@ -32,16 +32,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="specialty" class="col-md-4 control-label">Especialidad</label>
+                            <label for="doctor" class="col-md-4 control-label">Medico</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $specialty->name }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="doctor" class="col-md-4 control-label">Doctor</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $doctor->name." ".$doctor->lastname }}" readonly>
+                                <input type="text" class="form-control"  value="{{ $doctor->name." ".$doctor->lastname." (".$doctor->specialty->name.")" }}" readonly>
                             </div>
                         </div>
 

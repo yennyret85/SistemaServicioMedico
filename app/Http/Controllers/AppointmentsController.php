@@ -39,8 +39,7 @@ class AppointmentsController extends Controller
 
         $patients = User::role('Paciente')->get();
         $doctors = User::role('Medico')->get();
-        $specialties = Specialty::all();
-        return view('appointments.create', ['patients'=>$patients, 'doctors'=>$doctors, 'specialties'=>$specialties]);
+        return view('appointments.create', ['patients'=>$patients, 'doctors'=>$doctors]);
     }
 
     /**
@@ -55,7 +54,6 @@ class AppointmentsController extends Controller
         $v = Validator::make($request->all(), [
             'patient' => 'required',
             'doctor' => 'required',
-            'specialty' => 'required',
             'appointment_date' => 'required|date',
             'appointment_time' => 'required',
         ]);
@@ -66,22 +64,20 @@ class AppointmentsController extends Controller
 
         try {
             $patient = User::findOrFail($request->input('patient'));
-            $specialty = User::findOrFail($request->input('specialty'));
             $doctor = User::findOrFail($request->input('doctor'));
 
             \DB::beginTransaction();
             Appointment::create([
                 'patient_id' => $request->input('patient'),
                 'doctor_id' => $doctor->id,
-                'specialty_id' => $specialty->id,
+                'specialty_id' => $doctor->specialty_id,
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
+                'status' => ($request->input('status')!='')?$request->input('status'):'Asignada',
             ]);
         } catch (\Exception $e) {
-            var_dump($e);
             \DB::rollback();
-
-            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
@@ -186,20 +182,51 @@ class AppointmentsController extends Controller
         return redirect('/appointments')->with('mensaje', 'Cita ha sido eliminada satisfactoriamente');
     }
 
-    public function vermiscitas()
+    public function vistastatus($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $patient = $appointment->patient;
+        $doctor = $appointment->doctor;
+        $status = ['Asignada', 'Concluida', 'Cancelada'];
+        return view('appointments.statusappointments', ['appointment'=>$appointment, 'patient'=>$patient, 'doctor'=>$doctor, 'status'=>$status]);
+    }
+
+    public function cambiarstatus(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        $v = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try {
+            
+            \DB::beginTransaction();
+
+            $appointment = Appointment::findOrFail($id);
+
+            $appointment->update([
+                'status' => $request->input('status'),
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/appointments')->with('mensaje', 'Status Modificado Satisfactoriamente');
+    }
+
+public function vermiscitas()
     {
         if(!Auth::user()->can('VerMisCitas'))
             abort(403, 'Permiso Denegado.');
 
         return view('patients.myappointments');
     }
-/*
-    public function vertodaslascitas()
-    {
-        if(!Auth::user()->can('VerTodasLasCitas'))
-            abort(403, 'Permiso Denegado.');
-        
-        return view('appointments.allappointments');
-    }
-    */
+
 }

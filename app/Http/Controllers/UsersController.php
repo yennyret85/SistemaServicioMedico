@@ -244,8 +244,4 @@ class UsersController extends Controller
         return view('patients.index', ['users' => $patients]);
     }
 
-
-
 }
-
-    
