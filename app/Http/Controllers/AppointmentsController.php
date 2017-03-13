@@ -196,7 +196,7 @@ class AppointmentsController extends Controller
         $appointment = Appointment::findOrFail($id);
 
         $v = Validator::make($request->all(), [
-            'status' => 'required',
+            'status' => Auth::user()->hasRole('Medico')? '' : 'required',
         ]);
 
         if ($v->fails()) {
@@ -210,7 +210,7 @@ class AppointmentsController extends Controller
             $appointment = Appointment::findOrFail($id);
 
             $appointment->update([
-                'status' => $request->input('status'),
+                'status' => Auth::user()->hasRole('Medico')? 'Concluida' : $request->input('status'),
             ]);
         } catch (\Exception $e) {
             \DB::rollback();
@@ -218,15 +218,18 @@ class AppointmentsController extends Controller
         } finally {
             \DB::commit();
         }
-        return redirect('/appointments')->with('mensaje', 'Status Modificado Satisfactoriamente');
+        return redirect('/appointments')->with('mensaje', 'Cambio de Status de Cita realizado satisfactoriamente');
     }
 
-public function vermiscitas()
+    public function vermiscitas()
     {
         if(!Auth::user()->can('VerMisCitas'))
             abort(403, 'Permiso Denegado.');
 
-        return view('patients.myappointments');
-    }
+        if(Auth::user()->hasRole('Paciente'))
+            return view('patients.myappointments');
 
+        if(Auth::user()->hasRole('Medico'))
+            return view('doctors.myappointments');
+    }
 }

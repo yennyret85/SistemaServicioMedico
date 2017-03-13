@@ -23,17 +23,28 @@
                             <tr>
                                 <th>Fecha</th>
                                 <th>Hora</th>
-                                <th>Medico</th>
-                                <th>Especialidad</th>
+                                <th>Paciente</th>
                                 <th>Status</th>
+                                <th>Acciones</th>
                             </tr>
-                            @foreach(Auth::user()->appointments_patient as $appointment)
+                            @foreach(Auth::user()->appointments_doctor as $appointment)
                             <tr>
                                 <td>{{ $appointment->appointment_date }}</td>
                                 <td>{{ $appointment->appointment_time }}</td>
-                                <td>{{ $appointment->doctor->name." ".$appointment->doctor->lastname }}</td>
-                                <td>{{ $appointment->doctor->specialty->name }}</td>
+                                <td>{{ $appointment->patient->name." ".$appointment->patient->lastname." | C.I. ".$appointment->patient->idcard }}</td>
                                 <td>{{ $appointment->status }}</td>
+                                <td>
+                                    @if(Auth::user()->hasPermissionTo('VerRecipe'))
+                                        <a href="{{ url('/recipes') }}" class="btn btn-primary" title="Ver Recipes" ><i class="fa fa-vcard"></i>
+                                        </a>
+                                    @endif
+                                    @if(Auth::user()->hasPermissionTo('VerHistoriaMedica'))
+                                        <a href="{{ url('/medicalrecords') }}" class="btn btn-success" title="Ver Historia Médica"><i class="fa fa-h-square"></i></a>
+                                    @endif
+                                    @if(Auth::user()->hasPermissionTo('ConcluirCita'))
+                                        <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Concluir Cita"><i class="fa fa-calendar-times-o"></i></a>
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
                         </table>

@@ -3,9 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Medicine;
+use Validator;
+use Auth;
 
-class MedicalRecordsController extends Controller
+class MedicinesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +23,8 @@ class MedicalRecordsController extends Controller
      */
     public function index()
     {
-        //
+        $medicines = Medicine::paginate();
+        return view('medicines.index', ['medicines'=>$medicines]);
     }
 
     /**
@@ -23,7 +34,10 @@ class MedicalRecordsController extends Controller
      */
     public function create()
     {
-        //
+        if(!Auth::user()->hasPermissionTo('CrearMedicina'))
+            abort(403);
+
+        return view('medicines.create');
     }
 
     /**
@@ -34,7 +48,29 @@ class MedicalRecordsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'name' => 'required|max:50',
+        ]);
+
+        if($v->fails()){
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try{
+            \DB::beginTransaction();
+
+            Medicine::create([
+                'name'=>$request->input('name'),
+            ]);
+
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/medicines')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+
+        return redirect('/medicines')->with('mensaje', 'Medicina creada con éxito');
     }
 
     /**
@@ -45,7 +81,8 @@ class MedicalRecordsController extends Controller
      */
     public function show($id)
     {
-        //
+        $medicine = Medicine::findOrFail($id);
+        return view('medicines.show', ['medicine'=>$medicine]);
     }
 
     /**
@@ -79,6 +116,18 @@ class MedicalRecordsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Auth::user()->hasPermissionTo('EliminarMedicina'))
+            abort(403);
+
+        try{
+            \DB::beginTransaction();
+            Medicine::destroy($id);
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/medicines')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+        return redirect('/medicines')->with('mensaje', 'Medicina eliminada exitosamente');
     }
 }

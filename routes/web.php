@@ -22,9 +22,10 @@ Route::resource('/roles', 'RolesController');
 Route::resource('/permissions', 'PermissionsController');
 Route::resource('/users', 'UsersController');
 Route::resource('/appointments', 'AppointmentsController');
+Route::resource('/medicines', 'MedicinesController');
 
 Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
-Route::get('/myappointments', 'AppointmentsController@vermiscitas');
+Route::get('/myappointments', 'AppointmentsController@vermiscitas'); //VerMisCitas/Med/Pac
 
 
 

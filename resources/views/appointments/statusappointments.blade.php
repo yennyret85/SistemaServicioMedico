@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="doctor" class="col-md-4 control-label">Medico</label>
+                            <label for="doctor" class="col-md-4 control-label">Médico</label>
                             <div class="col-md-6">
                                 <input type="text" class="form-control"  value="{{ $doctor->name." ".$doctor->lastname." (".$doctor->specialty->name.")" }}" readonly>
                             </div>

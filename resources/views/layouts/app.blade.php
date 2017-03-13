@@ -72,7 +72,7 @@
                             <li><a href="{{ url('/doctors') }}">Médicos</a></li>
                             @endhasrole
                             @hasrole('Medico')
-                                <li><a href="{{ url('/appointments') }}">Citas</a></li>
+                                <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>
                                 <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
                                 <li><a href="{{ url('/recipes') }}">Recipes</a></li>
                                 <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
