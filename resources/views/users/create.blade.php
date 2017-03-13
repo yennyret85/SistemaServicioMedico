@@ -176,27 +176,27 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                             </div>
                         </div>
+                        @if(!(Auth::user()->hasRole('Secretaria'))) 
+                            <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
+                                <label for="role" class="col-md-4 control-label">Rol</label>
 
-                        <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
-                            <label for="role" class="col-md-4 control-label">Rol</label>
+                                <div class="col-md-6">
+                                    <select name="role" id="role" class="form-control">
+                                        <option value="">Seleccione</option>
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->name }}" @if(old('role')==$role->name) selected @endif>
+                                            {{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
 
-                            <div class="col-md-6">
-                                <select name="role" id="role" class="form-control">
-                                    <option value="">Seleccione</option>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->name }}">
-                                        <!-- @if(old('role')==$role->name) selected @endif -->
-                                        {{ $role->name }}</option>
-                                    @endforeach
-                                </select>
-
-                                @if ($errors->has('role'))
-                                    <span class="help-block">
-                                    <strong>{{ $errors->first('role') }}</strong>
-                                </span>
-                                @endif
+                                    @if ($errors->has('role'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('role') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div id="specialtyDiv" class="form-group{{ $errors->has('specialty') ? ' has-error' : '' }}" style="display: none">
                             <label for="specialty" class="col-md-4 control-label">Especialidad</label>

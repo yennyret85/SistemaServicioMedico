@@ -21,15 +21,11 @@ Route::get('/home', 'HomeController@index');
 Route::resource('/roles', 'RolesController');
 Route::resource('/permissions', 'PermissionsController');
 Route::resource('/users', 'UsersController');
+Route::resource('/appointments', 'AppointmentsController');
 
-
-Route::get('/users/create','UsersController@create');
-Route::get('/patients','UsersController@patients');
-Route::get('/employees','UsersController@employees');
+Route::get('/patients','UsersController@patients'); //Ver mis citas del Paciente
 
 Route::get('/users/{id}/permissions','UsersController@permissions');
 Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');
-
-
 Route::get('/roles/{id}/permissions','RolesController@permissions');
 Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');

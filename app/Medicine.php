@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+
 
 class Medicine extends Model
 {
@@ -12,4 +15,9 @@ class Medicine extends Model
     protected $fillable = [
     	'name',
     ];
+
+    public function recipe()
+    {
+        return $this->belongsToMany('App\Recipe', 'recipe_id');
+    }
 }

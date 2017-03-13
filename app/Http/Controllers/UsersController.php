@@ -37,7 +37,7 @@ class UsersController extends Controller
     
     public function create()
     {
-        if(!Auth::user()->can('RegistrarUsuario'))
+        if(!Auth::user()->hasPermissionTo('RegistrarUsuario'))
             abort(403, 'Acceso Prohibido');
 
         $roles = Role::all();
@@ -65,7 +65,7 @@ class UsersController extends Controller
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-            'role' => 'required',
+            'role' => Auth::user()->hasRole('Secretaria')? '' : 'required',
             'specialty' => 'required_if:role,Medico',
         ]);
 
@@ -89,8 +89,8 @@ class UsersController extends Controller
                 'password' => bcrypt($request->input('password')),
                 'specialty_id' => ($request->input('specialty')!='')?$request->input('specialty'):NULL,
             ]);
-
-            $user->assignRole($request->input('role'));
+            
+            $user->assignRole(Auth::user()->hasRole('Secretaria')? 'Paciente' : $request->input('role'));
 
         } catch (\Exception $e) {
             \DB::rollback();
@@ -121,7 +121,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        if(!Auth::user()->can('EditarUsuario'))
+        if(!Auth::user()->hasPermissionTo('EditarUsuario'))
             abort(403,'Acceso Prohibido');
 
         $user = User::findOrFail($id);
@@ -149,7 +149,7 @@ class UsersController extends Controller
             'cellphone' => 'required|max:255',
             'address' => 'max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$id.',id',
-            'role' => 'required',
+            'role' => Auth::user()->hasRole('Secretaria')? '' : 'required',
             'specialty' => 'required_if:role,Medico',
         ]);
 
@@ -190,7 +190,8 @@ class UsersController extends Controller
                 ]);
             }
 
-            $user->syncRoles($request->input('role'));
+            if (!Auth::user()->hasRole('Secretaria'))
+                $user->syncRoles($request->input('role'));
 
         }catch (\Exception $e){
             echo $e->getMessage();
@@ -211,7 +212,7 @@ class UsersController extends Controller
 
     public function destroy($id)
     {
-        if(!Auth::user()->can('EliminarUsuario'))
+        if(!Auth::user()->hasPermissionTo('EliminarUsuario'))
             abort(403, 'Permiso Denegado.');
 
         User::destroy($id);
@@ -220,7 +221,7 @@ class UsersController extends Controller
 
     public function permissions($id)
     {
-        if(!Auth::user()->can('AsignarPermiso'))
+        if(!Auth::user()->hasPermissionTo('AsignarPermiso'))
             abort(403, 'Permiso Denegado.');
 
         $user = User::findOrFail($id);
@@ -242,6 +243,8 @@ class UsersController extends Controller
         $patients = User::role('Paciente')->paginate();
         return view('patients.index', ['users' => $patients]);
     }
+
+
 
 }
 

@@ -15,6 +15,18 @@ class MedicinesTableSeeder extends Seeder
         	'name' => 'Acetaminofen',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
-        	]);
+        ]);
+
+        DB::table('medicines')->insert([
+            'name' => 'Losartan Potásico',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
+
+        DB::table('medicines')->insert([
+            'name' => 'Ibuprofeno',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now(),
+        ]);
     }
 }

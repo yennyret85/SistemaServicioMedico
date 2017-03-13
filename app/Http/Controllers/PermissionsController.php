@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -17,7 +18,7 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::paginate(8);
+        $permissions = Permission::paginate();
         return view('permissions.index', ['permissions'=>$permissions]);
     }
 
@@ -28,6 +29,9 @@ class PermissionsController extends Controller
      */
     public function create()
     {
+        if(!Auth::user()->can('CrearPermiso'))
+            abort(403, 'Acceso Prohibido');
+
         return view('permissions.create');
     }
 
@@ -83,6 +87,9 @@ class PermissionsController extends Controller
      */
     public function edit($id)
     {
+        if(!Auth::user()->can('EditarPermiso'))
+            abort(403, 'Acceso Prohibido');
+
         $permission = Permission::findOrFail($id);
         return view('permissions.edit', ['permission'=>$permission]);
     }
@@ -130,6 +137,9 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
+        if(!Auth::user()->can('EliminarPermiso'))
+            abort(403, 'Acceso Prohibido');
+
         try{
             \DB::beginTransaction();
             Permission::destroy($id);

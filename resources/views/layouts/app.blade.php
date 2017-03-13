@@ -81,7 +81,7 @@
                                 <li><a href="{{ url('/recipes') }}">Recipes</a></li>
                             @endhasrole
                             @hasrole('Paciente')
-                                <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>
+                                <li><a href="{{ url('/patients') }}">Mis Citas</a></li>
                             @endhasrole
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -107,7 +107,6 @@
                 </div>
             </div>
         </nav>
-
         @yield('content')
     </div>
 
@@ -128,7 +127,7 @@
             }else {
                 $('#specialtyDiv').hide();
             }
-        });
+        }).trigger('change');
     </script>
 </body>
 </html>

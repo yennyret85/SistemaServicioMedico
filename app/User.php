@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 use Spatie\Permission\Traits\HasRoles;
 
@@ -18,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'lastname', 'idcard', 'sex', 'birtdate', 'phone', 'cellphone', 'address', 'email', 'password', 'especialidad_id',
+        'name', 'lastname', 'idcard', 'sex', 'birtdate', 'phone', 'cellphone', 'address', 'email', 'password', 'specialty_id',
     ];
 
     /**
@@ -29,4 +31,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function specialty()
+    {
+        return $this->belongsTo('App\Specialty', 'specialty_id');
+    }
+
+    public function appointment()
+    {
+        return $this->hasMany('App\Appointment', 'appointment_id');
+    }
+
+    public function recipe()
+    {
+        return $this->hasMany('App\Recipe', 'recipe_id');
+    }
+    
 }

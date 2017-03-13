@@ -20,7 +20,7 @@
                     <div class="panel-body">
                         Listado de Roles
 
-                        @if(Auth::user()->can('CrearRole'))
+                        @if(Auth::user()->can('CrearRol'))
                             <a href="{{ url('/roles/create') }}" class="btn btn-success">
                                 <i class="fa fa-user"></i> Nuevo Role
                             </a>
@@ -89,7 +89,7 @@
                                 class="btn btn-default"
                                 data-dismiss="modal">Cancelar
                         </button>
-                        @if(Auth::user()->can('EliminarRole'))
+                        @if(Auth::user()->can('EliminarRol'))
                             <button id="delete-btn"
                                     class="btn btn-danger"
                                     title="Eliminar">Eliminar

@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+use App\Specialty;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Validator;
+
 class HomeController extends Controller
 {
     /**
@@ -25,4 +32,5 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
 }

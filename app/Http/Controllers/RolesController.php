@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Validator;
 use Auth;
 
@@ -38,7 +38,7 @@ class RolesController extends Controller
      */
     public function create()
     {
-        if(!Auth::user()->can('CrearRole'))
+        if(!Auth::user()->hasPermissionTo('CrearRol'))
             abort(403);
 
         return view('roles.create');
@@ -53,7 +53,7 @@ class RolesController extends Controller
     public function store(Request $request)
     {
         $v = Validator::make($request->all(), [
-            'name' => 'required|max:10|alpha',
+            'name' => 'required|max:50|alpha',
         ]);
 
         if($v->fails()){
@@ -69,12 +69,12 @@ class RolesController extends Controller
 
         }catch(\Exception $e){
             \DB::rollback();
-            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect('/roles')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
 
-        return redirect('/roles')->with('mensaje', 'Role ha sido creado con exito');
+        return redirect('/roles')->with('mensaje', 'Rol ha sido creado con exito');
     }
 
     /**
@@ -97,7 +97,7 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        if(!Auth::user()->can('EditarRole'))
+        if(!Auth::user()->hasPermissionTo('EditarRol'))
             abort(403);
 
         $role = Role::findOrFail($id);
@@ -136,7 +136,7 @@ class RolesController extends Controller
             \DB::commit();
         }
 
-        return redirect('/roles')->with('mensaje', 'Role ha sido editado con exito');
+        return redirect('/roles')->with('mensaje', 'Rol ha sido editado con exito');
     }
 
     /**
@@ -147,20 +147,23 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
+        if(!Auth::user()->hasPermissionTo('EliminarRol'))
+            abort(403);
+
         try{
             \DB::beginTransaction();
             Role::destroy($id);
         }catch(\Exception $e){
             \DB::rollback();
-            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect('/roles')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
-        return redirect('/roles')->with('mensaje', 'Role ha sido eliminado con exito');
+        return redirect('/roles')->with('mensaje', 'Rol ha sido eliminado con exito');
     }
 
     public function permissions($id){
-        if(!Auth::user()->can('asignarPermisos'))
+        if(!Auth::user()->hasPermissionTo('AsignarPermiso'))
             abort(403);
 
         $role = Role::findOrFail($id);

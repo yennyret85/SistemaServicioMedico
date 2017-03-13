@@ -177,6 +177,7 @@
                             </div>
                         </div>
 
+                        @if(!(Auth::user()->hasRole('Secretaria'))) 
                         <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
                             <label for="role" class="col-md-4 control-label">Rol</label>
 
@@ -197,6 +198,7 @@
                                 @endif
                             </div>
                         </div>
+                        @endif
 
                         <div id="specialtyDiv" class="form-group{{ $errors->has('specialty') ? ' has-error' : '' }}" style="display: none">
                             <label for="specialty" class="col-md-4 control-label">Especialidad</label>
@@ -205,7 +207,7 @@
                                 <select name="specialty" id="specialty" class="form-control">
                                     <option value="">Seleccione</option>
                                     @foreach($specialties as $specialty)
-                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                        <option value="{{ $specialty->id }}" @if($user->specialty_id==$specialty->id) selected @endif>{{ $specialty->name }}</option>
                                     @endforeach
                                 </select>
 
