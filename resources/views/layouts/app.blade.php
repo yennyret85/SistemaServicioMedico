@@ -64,7 +64,7 @@
                                 <li><a href="{{ url('/roles') }}">Roles</a></li>
                                 <li><a href="{{ url('/permissions') }}">Permisos</a></li>
                                 <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
-                                <li><a href="{{ url('/especialties') }}">Especialidades</a></li>
+                                <li><a href="{{ url('/specialties') }}">Especialidades</a></li>
                             @endhasrole
                             @hasrole('Secretaria')
                             <li><a href="{{ url('/appointments') }}">Citas</a></li>

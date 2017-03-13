@@ -225,6 +225,5 @@ class PermissionsTableSeeder extends Seeder
         'updated_at' => \Carbon\Carbon::now(),
     ]);
 
-
-    } //28 Permisos
+    } //33 Permisos
 }

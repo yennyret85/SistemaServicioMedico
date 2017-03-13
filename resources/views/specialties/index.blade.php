@@ -15,45 +15,35 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Roles</div>
+                    <div class="panel-heading">Especialidades</div>
 
                     <div class="panel-body">
-                        Listado de Roles
-
-                        @if(Auth::user()->can('CrearRol'))
-                            <a href="{{ url('/roles/create') }}" class="btn btn-success">
-                                <i class="fa fa-user"></i> Nuevo Role
+                    		@if(Auth::user()->hasPermissionTo('CrearEspecialidad'))
+                            <a href="{{ url('/specialties/create') }}" class="btn btn-success" title="Nueva Especialidad">
+                                <i class="fa fa-medkit"></i> Nueva Especialidad
                             </a>
-                        @endif
-
+                            @endif
                         <table class="table table-bordered">
                             <tr>
                                 <th>Nombre</th>
                                 <th width="10%" colspan="3">Acciones</th>
                             </tr>
-                            @foreach($roles as $role)
+                            @foreach($specialties as $specialty)
                                 <tr>
-                                    <td>{{ $role->name }}</td>
-                                    @if(Auth::user()->hasPermissionTo('AsignarPermiso'))
+                                    <td>{{ $specialty->name }}</td>
+                                    @if(Auth::user()->hasPermissionTo('EditarEspecialidad'))
                                     <td>
-                                        <a href="{{ url('roles/'.$role->id.'/permissions') }}" class="btn btn-warning" title="Asignar Permiso">
-                                            <i class="fa fa-id-card"></i>
-                                        </a>
-                                    </td>
-                                    @endif
-                                    @if(Auth::user()->hasPermissionTo('EditarRol'))
-                                    <td>
-                                        <a href="{{ url('roles/'.$role->id.'/edit') }}" class="btn btn-primary" title="Editar Rol">
+                                        <a href="{{ url('specialties/'.$specialty->id.'/edit') }}" class="btn btn-primary" title="Editar Especialidad">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
                                     @endif
-                                    @if(Auth::user()->hasPermissionTo('EliminarRol'))
+                                    @if(Auth::user()->hasPermissionTo('EliminarEspecialidad'))
                                     <td>
                                         <button class="btn btn-danger"
-                                                data-action="{{ url('/roles/'.$role->id) }}"
-                                                data-name="{{ $role->name }}"
-                                                data-toggle="modal" data-target="#confirm-delete" title="Eliminar Rol">
+                                                data-action="{{ url('/specialties/'.$specialty->id) }}"
+                                                data-name="{{ $specialty->name }}"
+                                                data-toggle="modal" data-target="#confirm-delete" title="Eliminar Especialidad">
                                             <i class="fa fa-trash fa-1x"></i>
                                         </button>
                                     </td>
@@ -62,7 +52,7 @@
                             @endforeach
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    {{ $roles->links() }}
+                                    {{ $specialties->links() }}
                                 </td>   
                             </tr>
                         </table>
@@ -80,8 +70,7 @@
 
                 </div>
                 <div class="modal-body">
-                    <p>¿Seguro que desea eliminar este
-                        registro?</p>
+                    <p>¿Seguro que desea eliminar esta especialidad?</p>
                     <p class="nombre"></p>
                 </div>
                 <div class="modal-footer">
@@ -95,12 +84,12 @@
                                 class="btn btn-default"
                                 data-dismiss="modal">Cancelar
                         </button>
-                        @if(Auth::user()->can('EliminarRol'))
-                            <button id="delete-btn"
-                                    class="btn btn-danger"
-                                    title="Eliminar">Eliminar
-                            </button>
-                        @endif
+                        @if(Auth::user()->hasPermissionTo('EliminarEspecialidad'))
+	                        <button id="delete-btn"
+	                                class="btn btn-danger"
+	                                title="Eliminar">Eliminar
+	                        </button>
+	                    @endif
                     </form>
                 </div>
             </div>

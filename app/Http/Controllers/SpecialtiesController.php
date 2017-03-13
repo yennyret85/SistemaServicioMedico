@@ -3,9 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Specialty;
+use Validator;
+use Auth;
 
 class SpecialtiesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +24,8 @@ class SpecialtiesController extends Controller
      */
     public function index()
     {
-        //
+        $specialties = Specialty::paginate();
+        return view('specialties.index', ['specialties'=>$specialties]);
     }
 
     /**
@@ -23,7 +35,10 @@ class SpecialtiesController extends Controller
      */
     public function create()
     {
-        //
+        if(!Auth::user()->hasPermissionTo('CrearEspecialidad'))
+            abort(403);
+
+        return view('specialties.create');
     }
 
     /**
@@ -34,7 +49,29 @@ class SpecialtiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'name' => 'required|max:50',
+        ]);
+
+        if($v->fails()){
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try{
+            \DB::beginTransaction();
+
+            Specialty::create([
+                'name'=>$request->input('name'),
+            ]);
+
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/specialties')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+
+        return redirect('/specialties')->with('mensaje', 'Especialidad creada con éxito');
     }
 
     /**
@@ -45,7 +82,8 @@ class SpecialtiesController extends Controller
      */
     public function show($id)
     {
-        //
+        $specialty = Specialty::findOrFail($id);
+        return view('specialties.show', ['specialty'=>$specialty]);
     }
 
     /**
@@ -56,7 +94,11 @@ class SpecialtiesController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(!Auth::user()->hasPermissionTo('EditarEspecialidad'))
+            abort(403);
+
+        $specialty = Specialty::findOrFail($id);
+        return view('specialties.edit', ['specialty'=>$specialty]);
     }
 
     /**
@@ -68,7 +110,30 @@ class SpecialtiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'name' => 'required|max:50',
+        ]);
+
+        if($v->fails()){
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try{
+            \DB::beginTransaction();
+
+            $specialty = Specialty::findOrFail($id);
+            $specialty->update([
+                'name'=>$request->input('name'),
+            ]);
+
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/specialties')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+
+        return redirect('/specialties')->with('mensaje', 'Especialidad editada con exito');
     }
 
     /**
@@ -79,6 +144,20 @@ class SpecialtiesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Auth::user()->hasPermissionTo('EliminarEspecialidad'))
+            abort(403);
+
+        try{
+            \DB::beginTransaction();
+            
+            Specialty::destroy($id);
+        
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/specialties')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+        return redirect('/specialties')->with('mensaje', 'Especialidad eliminada exitosamente');
     }
 }

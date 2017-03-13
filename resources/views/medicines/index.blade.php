@@ -18,9 +18,13 @@
                     <div class="panel-heading">Medicinas</div>
 
                     <div class="panel-body">
-                            <a href="{{ url('/medicines/create') }}" class="btn btn-success">
+                    	<div class="panel-body">
+                    		@if(Auth::user()->hasPermissionTo('CrearMedicina'))
+                            <a href="{{ url('/medicines/create') }}" class="btn btn-success" title="Nueva Medicina">
                                 <i class="fa fa-medkit"></i> Nueva Medicina
                             </a>
+                            @endif
+                        </div>
                         <table class="table table-bordered">
                             <tr>
                                 <th>Nombre</th>
@@ -29,14 +33,16 @@
                             @foreach($medicines as $medicine)
                                 <tr>
                                     <td>{{ $medicine->name }}</td>
+                                    @if(Auth::user()->hasPermissionTo('EliminarMedicina'))
                                     <td>
                                         <button class="btn btn-danger"
                                                 data-action="{{ url('/medicines/'.$medicine->id) }}"
                                                 data-name="{{ $medicine->name }}"
-                                                data-toggle="modal" data-target="#confirm-delete">
+                                                data-toggle="modal" data-target="#confirm-delete" title="Eliminar Medicina">
                                             <i class="fa fa-trash fa-1x"></i>
                                         </button>
                                     </td>
+                                    @endif
                                 </tr>
                             @endforeach
                             <tr>
@@ -73,10 +79,12 @@
                                 class="btn btn-default"
                                 data-dismiss="modal">Cancelar
                         </button>
-                            <button id="delete-btn"
-                                    class="btn btn-danger"
-                                    title="Eliminar">Eliminar
-                            </button>
+                        @if(Auth::user()->hasPermissionTo('EliminarMedicina'))
+	                        <button id="delete-btn"
+	                                class="btn btn-danger"
+	                                title="Eliminar">Eliminar
+	                        </button>
+	                    @endif
                     </form>
                 </div>
             </div>
