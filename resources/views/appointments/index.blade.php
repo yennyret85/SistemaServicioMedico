@@ -9,12 +9,15 @@
 
                     <div class="panel-body">
                         <strong>Listado de Citas</strong>
-                        <a href="{{ url('/appointments/create') }}" class="btn btn-success">
-                            <i class="fa fa-calendar"></i> Nueva Cita
-                        </a>
+                        @if(Auth::user()->hasPermissionTo('AsignarCita'))
+                            <a href="{{ url('/appointments/create') }}" class="btn btn-success">
+                                <i class="fa fa-calendar"></i> Crear Cita
+                            </a>
+                        @endif
                         <table class="table table-bordered">
                             <tr>
                                 <th>Fecha</th>
+                                <th>Hora</th>
                                 <th>Paciente</th>
                                 <th>Medico</th>
                                 <th>Especialidad</th>
@@ -24,26 +27,27 @@
                             @foreach($appointments as $appointment)
                             <tr>
                                 <td>{{ $appointment->appointment_date }}</td>
+                                <td>{{ $appointment->appointment_time }}</td>
                                 <td>{{ $appointment->patient->name." ".$appointment->patient->lastname }}</td>
                                 <td>{{ $appointment->doctor->name." ".$appointment->doctor->lastname }}</td>
                                 <td>{{ $appointment->specialty->name }}</td>
                                 <td>{{ $appointment->status }}</td>
 
-                                @if(Auth::user()->can('EditarCita'))
+                                @if(Auth::user()->hasPermissionTo('EditarCita'))
                                 <td>
                                 <a href="{{ url('appointments/'.$appointment->id.'/edit') }}" class="btn btn-primary">
                                         <i class="fa fa-calendar"></i>
                                     </a>
                                 </td>
                                 @endif
-                                @if(Auth::user()->can('CambiarStatusCita'))
+                                @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
                                 <td>
                                 <a href="{{ url('appointments/'.$appointment->id.'/statusappoitnments') }}" class="btn btn-warning">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                 </td>
                                 @endif
-                                @if(Auth::user()->can('EliminarCita'))
+                                @if(Auth::user()->hasPermissionTo('EliminarCita'))
                                 <td>
                                     <button class="btn btn-danger"
                                             data-action="{{ url('/appointments/'.$appointment->id) }}"
@@ -55,7 +59,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                                <td colspan="8" class="text-center">
+                                <td colspan="9" class="text-center">
                                     {{ $appointments->links() }}
                                 </td>
                             </tr>

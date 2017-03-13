@@ -110,10 +110,11 @@ class AppointmentsController extends Controller
         if(!Auth::user()->can('EditarCita'))
             abort(403, 'Acceso Prohibido');
 
-        $patient = User::role('Paciente')->get();
-        $doctor = User::role('Medico')->get();
-        $specialties = Specialty::all();
-        return view('appointments.create', ['patient'=>$patient, 'doctor'=>$doctor, 'specialties'=>$specialties]);
+        $appointment = Appointment::findOrFail($id);
+        $patient = $appointment->patient;
+        $doctor = $appointment->doctor;
+        $specialty = $appointment->specialty;
+        return view('appointments.edit', ['patient'=>$patient, 'doctor'=>$doctor, 'specialty'=>$specialty, 'appointment'=>$appointment]);
     }
 
     /**
@@ -125,23 +126,37 @@ class AppointmentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $v = Validator::make($request->all(), [
+            //'patient' => 'required',
+            //'doctor' => 'required',
+            //'specialty' => 'required',
+            'appointment_date' => 'required|date',
+            'appointment_time' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
         try {
-            $doctor = User::findOrFail($request->input('doctor'));
-            $patient = User::findOrFail($request->input('patient'));
+            //$doctor = Appointment::findOrFail($request->input('doctor'));
+            //$patient = Appointment::findOrFail($request->input('patient'));
+            //$specialty = Appointment::findOrFail($request->input('specialty'));
+            
             \DB::beginTransaction();
-            Cita::edit([
-                'patient_id' => $request->input('patient_id'),
-                'specialty_id' => $doctor->specialty->id,
-                'doctor_id' => $doctor->id,
+
+            $appointment = Appointment::findOrFail($id);
+
+            $appointment->update([
+                //'patient_id' => $request->input('patient_id'),
+                //'specialty_id' => $doctor->specialty->id,
+                //'doctor_id' => $doctor->id,
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
-                'status' => $request->input('status'),
-                'reason_for_appointment' => $request->input('reason_for_appointment'),
             ]);
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
@@ -178,12 +193,13 @@ class AppointmentsController extends Controller
 
         return view('patients.myappointments');
     }
-
+/*
     public function vertodaslascitas()
     {
         if(!Auth::user()->can('VerTodasLasCitas'))
             abort(403, 'Permiso Denegado.');
         
-        return view('patients.allappointments');
+        return view('appointments.allappointments');
     }
+    */
 }
