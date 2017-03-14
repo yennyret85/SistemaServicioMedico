@@ -56,11 +56,12 @@
                         <li><a href="{{ url('/register') }}">Registrarse</a></li>
                         @else
                             @hasrole ('Administrador')
+                                <li><a href="{{ url('/users') }}">Usuarios</a></li>
                                 <li><a href="{{ url('/patients') }}">Pacientes</a></li>
-                                <li><a href="{{ url('/users') }}">Empleados</a></li>
-                                <li><a href="{{ url('/recipes') }}">Recipes</a></li>
-                                <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
+                                <li><a href="{{ url('/doctors') }}">Médicos</a></li>
                                 <li><a href="{{ url('/appointments') }}">Citas</a></li>
+                                <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
+                                <li><a href="{{ url('/recipes') }}">Recipes</a></li>
                                 <li><a href="{{ url('/roles') }}">Roles</a></li>
                                 <li><a href="{{ url('/permissions') }}">Permisos</a></li>
                                 <li><a href="{{ url('/medicines') }}">Medicinas</a></li>

@@ -16,7 +16,9 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Módulo de Citas</div>
+                    <div class="panel-heading">
+                        <strong>Módulo de Citas</strong>
+                    </div>
 
                     <div class="panel-body">
                         <strong>Listado de Citas</strong>
@@ -46,14 +48,14 @@
 
                                 @if(Auth::user()->hasPermissionTo('EditarCita'))
                                 <td>
-                                <a href="{{ url('appointments/'.$appointment->id.'/edit') }}" class="btn btn-primary">
+                                <a href="{{ url('appointments/'.$appointment->id.'/edit') }}" class="btn btn-primary" title="Editar Cita">
                                         <i class="fa fa-calendar"></i>
                                     </a>
                                 </td>
                                 @endif
                                 @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
                                 <td>
-                                <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning">
+                                <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Cambiar Status Cita">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                 </td>
@@ -62,7 +64,7 @@
                                 <td>
                                     <button class="btn btn-danger"
                                             data-action="{{ url('/appointments/'.$appointment->id) }}"
-                                            data-toggle="modal" data-target="#confirm-delete">
+                                            data-toggle="modal" data-target="#confirm-delete" title="Eliminar Cita">
                                         <i class="fa fa-trash fa-1x"></i>
                                     </button>
                                 </td>

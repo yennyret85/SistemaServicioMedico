@@ -15,9 +15,12 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Especialidades</div>
+                    <div class="panel-heading">
+                        <strong>Módulo de Especialidades</strong>
+                    </div>
 
                     <div class="panel-body">
+                        <strong>Listado de Especialidades </strong>
                     		@if(Auth::user()->hasPermissionTo('CrearEspecialidad'))
                             <a href="{{ url('/specialties/create') }}" class="btn btn-success" title="Nueva Especialidad">
                                 <i class="fa fa-medkit"></i> Nueva Especialidad

@@ -244,4 +244,9 @@ class UsersController extends Controller
         return view('patients.index', ['users' => $patients]);
     }
 
+    public function doctors()
+    {
+        $doctors = User::role('Medico')->paginate();
+        return view('doctors.index', ['users' =>$doctors]);
+    }
 }

@@ -15,10 +15,12 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Permisos</div>
+                    <div class="panel-heading">
+                        <strong>Módulo de Permisos</strong>
+                    </div>
 
                     <div class="panel-body">
-                        Listado de Permisos
+                        <strong>Listado de Permisos</strong>
 
                         <a href="{{ url('/permissions/create') }}" class="btn btn-success">
                             <i class="fa fa-user"></i> Nuevo Permiso

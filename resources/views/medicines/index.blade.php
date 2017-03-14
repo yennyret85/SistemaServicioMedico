@@ -15,16 +15,16 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Medicinas</div>
-
+                    <div class="panel-heading">
+                        <strong>Módulo Medicinas</strong>
+                    </div>
                     <div class="panel-body">
-                    	<div class="panel-body">
+                        <strong>Listado de Medicinas</strong>
                     		@if(Auth::user()->hasPermissionTo('CrearMedicina'))
                             <a href="{{ url('/medicines/create') }}" class="btn btn-success" title="Nueva Medicina">
                                 <i class="fa fa-medkit"></i> Nueva Medicina
                             </a>
                             @endif
-                        </div>
                         <table class="table table-bordered">
                             <tr>
                                 <th>Nombre</th>

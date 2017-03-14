@@ -25,7 +25,7 @@
                                 <th>Hora</th>
                                 <th>Paciente</th>
                                 <th>Status</th>
-                                <th>Acciones</th>
+                                <th width="10%" colspan="3">Acciones</th>
                             </tr>
                             @foreach(Auth::user()->appointments_doctor as $appointment)
                             <tr>
@@ -38,9 +38,13 @@
                                         <a href="{{ url('/recipes') }}" class="btn btn-primary" title="Ver Recipes" ><i class="fa fa-vcard"></i>
                                         </a>
                                     @endif
+                                </td>
+                                <td>
                                     @if(Auth::user()->hasPermissionTo('VerHistoriaMedica'))
                                         <a href="{{ url('/medicalrecords') }}" class="btn btn-success" title="Ver Historia Médica"><i class="fa fa-h-square"></i></a>
                                     @endif
+                                </td>
+                                <td>
                                     @if(Auth::user()->hasPermissionTo('ConcluirCita'))
                                         <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Concluir Cita"><i class="fa fa-calendar-times-o"></i></a>
                                     @endif

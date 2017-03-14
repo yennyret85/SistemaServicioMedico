@@ -16,9 +16,12 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading"><b>Listado de Empleados</b></div>
+                    <div class="panel-heading">
+                        <strong>Módulo Usuarios</strong>
+                    </div>
                         <div class="panel-body">
-                        @if(Auth::user()->can('RegistrarUsuario'))
+                        <strong>Listado de Usuarios</strong>
+                        @if(Auth::user()->hasPermissionTo('RegistrarUsuario'))
                         <a href="{{ url('/users/create') }}" class="btn btn-success">
                             <i class="fa fa-user"></i> Nuevo Usuario
                         </a>
@@ -38,28 +41,30 @@
                                     <td>{{ $user->lastname }}</td>
                                     <td>{{ $user->phone ." / ". $user->cellphone }}</td>
                                     <td>{{ $user->roles[0]->name }}</td>
-                                    @if(Auth::user()->can('PermisosUsuario'))
+                                    @if(Auth::user()->hasPermissionTo('AsignarPermiso'))
                                     <td>
                                         <a href="{{ url('users/'.$user->id.'/permissions') }}"
                                            class="btn btn-warning">
-                                            <i class="fa fa-id-card"></i>
+                                            <i class="fa fa-id-card" title="Asignar Permiso"></i>
                                         </a>
                                     </td>
                                     @endif
-                                    @if(Auth::user()->can('EditarUsuario'))
+                                    @if(Auth::user()->hasPermissionTo('EditarUsuario'))
                                     <td>
-                                        <a href="{{ url('users/'.$user->id.'/edit') }}" class="btn btn-primary">
+                                        <a href="{{ url('users/'.$user->id.'/edit') }}" class="btn btn-primary" title="Editar Usuario">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
                                     @endif
                                     <td>
+                                    @if(Auth::user()->hasPermissionTo('EliminarUsuario'))
                                         <button class="btn btn-danger"
                                                 data-action="{{ url('/users/'.$user->id) }}"
                                                 data-name="{{ $user->name . " " . $user->lastname . " C.I.: " . $user->cedula  }}"
-                                                data-toggle="modal" data-target="#confirm-delete">
+                                                data-toggle="modal" data-target="#confirm-delete" title="Eliminar Usuario">
                                             <i class="fa fa-trash fa-1x"></i>
                                         </button>
+                                    @endif
                                     </td>              
                                 </tr>
                             @endforeach
@@ -93,7 +98,7 @@
                                 class="btn btn-default"
                                 data-dismiss="modal">Cancelar
                         </button>
-                        @if(Auth::user()->can('EliminarUsuario'))
+                        @if(Auth::user()->hasPermissionTo('EliminarUsuario'))
                             <button id="delete-btn"
                                     class="btn btn-danger"
                                     title="Eliminar">Eliminar
