@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Specialty extends Model
 {
 
+    use SoftDeletes;
+
 	protected $table = "specialties";
 
     protected $fillable = [

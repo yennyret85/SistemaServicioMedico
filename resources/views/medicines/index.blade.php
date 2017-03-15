@@ -28,7 +28,9 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th>Nombre</th>
-                                <th width="10%" colspan="3">Acciones</th>
+                                @if(Auth::user()->hasPermissionTo('EliminarMedicina'))
+                                    <th width="10%" colspan="3">Acciones</th>
+                                @endif
                             </tr>
                             @foreach($medicines as $medicine)
                                 <tr>

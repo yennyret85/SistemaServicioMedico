@@ -12,7 +12,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+
     use Notifiable, HasRoles;
+
+    use SoftDeletes;
+
+    protected $table= "users";
 
     /**
      * The attributes that are mass assignable.

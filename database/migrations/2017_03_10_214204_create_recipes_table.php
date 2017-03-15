@@ -16,9 +16,13 @@ class CreateRecipesTable extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('status', ['Activo', 'Entregado', 'Cancelado']);
-            $table->integer('pharmacist_id')->unsigned();
+            $table->integer('medicalrecord_id')->unsigned();
+            $table->foreign('medicalrecord_id')->references('id')->on('users');
+            $table->integer('pharmacist_id')->unsigned()->nullable();
             $table->foreign('pharmacist_id')->references('id')->on('users');
+            $table->text('indications', 300)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

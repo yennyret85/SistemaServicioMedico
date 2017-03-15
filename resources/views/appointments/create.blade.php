@@ -28,7 +28,7 @@
                             <label for="patient" class="col-md-4 control-label">Paciente</label>
 
                             <div class="col-md-6">
-                            <select name="patient" id="patient" class="form-control" data-live-search="true">
+                            <select name="patient" id="patient" class="form-control" data-live-search="true" autofocus>
                                 <option value="">Seleccione</option>
                                 @foreach($patients as $patient)
                                     <option value="{{ $patient->id }}" @if(old('patient')==$patient->id) selected @endif> {{ $patient->name." ".$patient->lastname." | C.I. ".$patient->idcard}}</option>

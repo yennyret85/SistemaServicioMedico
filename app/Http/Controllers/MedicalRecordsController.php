@@ -2,7 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
+use App\MedicalRecord;
+use App\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Validator;
+ 
 
 class MedicalRecordsController extends Controller
 {
@@ -11,9 +20,15 @@ class MedicalRecordsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+        $medicalrecords = MedicalRecord::paginate();
+        return view('medicalrecords.index', ['medicalrecords'=>$medicalrecords]);
     }
 
     /**
@@ -21,9 +36,14 @@ class MedicalRecordsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('CrearHistoriaMedica'))
+            abort(403, 'Acceso Prohibido');
+
+        $appointment = Appointment::findOrFail($id);
+
+        return view('medicalrecords.create', [ 'appointment'=>$appointment]);
     }
 
     /**
@@ -34,7 +54,47 @@ class MedicalRecordsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $v = Validator::make($request->all(), [
+            'appointment_id' => 'required',
+            'reasonforappointment' => 'required',
+            'physicalevaluation' => 'required',
+            'medicalreport' => 'required'
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            $medicalrecord = MedicalRecord::create([
+                'appointment_id'=>$request->input('appointment_id'),
+                'reasonforappointment' => $request->input('reasonforappointment'),
+                'physicalevaluation' => $request->input('physicalevaluation'),
+                'medicalreport' => $request->input('medicalreport'),
+            ]);
+
+            /*
+            $recipe= Recipe::create([
+                'medicalrecord_id'=>$medicalrecord->id,
+                'status'=>($request->input('status') != '') ? $request->input('status') : 'Activo',
+                'medicine_id'=> $request->input('medicine_id')->nullable(),
+                'indications'=> $request->input('indications'),
+            ]);
+
+            $recipe->medicines->sync($request->input('medicine_id'));
+
+            */
+
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica creado con Éxito');
     }
 
     /**
@@ -56,7 +116,13 @@ class MedicalRecordsController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        if (!Auth::user()->hasPermissionTo('EditarHistoriaMedica'))
+            abort(403, 'Acceso Prohibido');
+
+        $medicalrecord = MedicalRecord::findOrFail($id);
+
+        return view('medicalrecords.edit', [ 'medicalrecord'=>$medicalrecord]);
     }
 
     /**
@@ -68,7 +134,46 @@ class MedicalRecordsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'reasonforappointment' => 'required',
+            'physicalevaluation' => 'required',
+            'medicalreport' => 'required'
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            $medicalrecord = MedicalRecord::findOrFail($id);
+
+            $medicalrecord->update([
+                'reasonforappointment' => $request->input('reasonforappointment'),
+                'physicalevaluation' => $request->input('physicalevaluation'),
+                'medicalreport' => $request->input('medicalreport'),
+            ]);
+
+            /*
+            $recipe= Recipe::create([
+                'medicalrecord_id'=>$medicalrecord->id,
+                'status'=>($request->input('status') != '') ? $request->input('status') : 'Activo',
+                'medicine_id'=> $request->input('medicine_id')->nullable(),
+                'indications'=> $request->input('indications'),
+            ]);
+
+            $recipe->medicines->sync($request->input('medicine_id'));
+
+            */
+
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica ha sido Modificado Exitosamente');
     }
 
     /**
@@ -79,6 +184,19 @@ class MedicalRecordsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('EliminarHistoriaMedica'))
+            abort(403, 'Permiso Denegado.');
+
+        try{
+            \DB::beginTransaction();
+            Appointment::destroy($id);
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/medicalrecords')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+        return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica eliminada Exitosamente');
     }
+
 }

@@ -15,16 +15,11 @@ class CreateMedicalRecordsTable extends Migration
     {
         Schema::create('medicalrecords', function (Blueprint $table) {
             $table->increments('id');
-            $table->date('medical_record_date');
-            $table->integer('patient_id')->unsigned();
-            $table->foreign('patient_id')->references('id')->on('users');
-            $table->integer('specialty_id')->unsigned();
-            $table->foreign('specialty_id')->references('id')->on('specialties');
-            $table->integer('doctor_id')->unsigned();
-            $table->foreign('doctor_id')->references('id')->on('users');
-            $table->integer('appointment_id')->unsigned();
+            $table->integer('appointment_id')->unsigned()->unique();
             $table->foreign('appointment_id')->references('id')->on('appointments');
-            $table->text('medical_report');
+            $table->text('reasonforappointment');
+            $table->text('physicalevaluation');
+            $table->text('medicalreport');
             $table->timestamps();
             $table->softDeletes();
         });

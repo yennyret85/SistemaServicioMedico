@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Specialty;
+use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Appointment;
-use App\Specialty;
-use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Validator;
 
 class AppointmentsController extends Controller
@@ -34,7 +37,7 @@ class AppointmentsController extends Controller
      */
     public function create()
     {
-        if(!Auth::user()->can('AsignarCita'))
+        if(!Auth::user()->hasPermissionTo('AsignarCita'))
             abort(403, 'Acceso Prohibido');
 
         $patients = User::role('Paciente')->get();
@@ -103,14 +106,13 @@ class AppointmentsController extends Controller
      */
     public function edit($id)
     {
-        if(!Auth::user()->can('EditarCita'))
+        if(!Auth::user()->hasPermissionTo('EditarCita'))
             abort(403, 'Acceso Prohibido');
 
         $appointment = Appointment::findOrFail($id);
         $patient = $appointment->patient;
         $doctor = $appointment->doctor;
-        $specialty = $appointment->specialty;
-        return view('appointments.edit', ['patient'=>$patient, 'doctor'=>$doctor, 'specialty'=>$specialty, 'appointment'=>$appointment]);
+        return view('appointments.edit', ['patient'=>$patient, 'doctor'=>$doctor, 'appointment'=>$appointment]);
     }
 
     /**
@@ -123,9 +125,6 @@ class AppointmentsController extends Controller
     public function update(Request $request, $id)
     {
         $v = Validator::make($request->all(), [
-            //'patient' => 'required',
-            //'doctor' => 'required',
-            //'specialty' => 'required',
             'appointment_date' => 'required|date',
             'appointment_time' => 'required',
         ]);
@@ -135,17 +134,15 @@ class AppointmentsController extends Controller
         }
 
         try {
-            //$doctor = Appointment::findOrFail($request->input('doctor'));
-            //$patient = Appointment::findOrFail($request->input('patient'));
-            //$specialty = Appointment::findOrFail($request->input('specialty'));
-            
+            $doctor = Appointment::findOrFail($request->input('doctor'));
+            $patient = Appointment::findOrFail($request->input('patient'));
+
             \DB::beginTransaction();
 
             $appointment = Appointment::findOrFail($id);
 
             $appointment->update([
                 //'patient_id' => $request->input('patient_id'),
-                //'specialty_id' => $doctor->specialty->id,
                 //'doctor_id' => $doctor->id,
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
@@ -167,7 +164,7 @@ class AppointmentsController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->can('EliminarCita'))
+        if (!Auth::user()->hasPermissionTo('EliminarCita'))
             abort(403, 'Permiso Denegado.');
 
         try{
@@ -214,16 +211,18 @@ class AppointmentsController extends Controller
             ]);
         } catch (\Exception $e) {
             \DB::rollback();
+
             return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
-        return redirect('/appointments')->with('mensaje', 'Cambio de Status de Cita realizado satisfactoriamente');
+
+        return redirect(Auth::user()->hasRole('Medico')? "/myappointments" : '/appointments')->with('mensaje', 'Cambio de Status de Cita realizado satisfactoriamente');
     }
 
     public function vermiscitas()
     {
-        if(!Auth::user()->can('VerMisCitas'))
+        if(!Auth::user()->hasPermissionTo('VerMisCitas'))
             abort(403, 'Permiso Denegado.');
 
         if(Auth::user()->hasRole('Paciente'))

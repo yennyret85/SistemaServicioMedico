@@ -11,6 +11,8 @@ class Appointment extends Model
 
     use SoftDeletes;
 
+    protected $table= "appointments";
+
     protected $fillable = [
     	'patient_id', 'doctor_id', 'specialty_id', 'appointment_date', 'appointment_time', 'status',
     ];
@@ -25,14 +27,14 @@ class Appointment extends Model
         return $this->belongsTo('App\User', 'doctor_id');
     }
 
-    public function medicalrecord()
-    {
-        return $this->hasMany('App\MedicalRecord', 'medicalrecord_id');
-    }
-
     public function specialty()
     {
         return $this->belongsTo('App\Specialty', 'specialty_id');
+    }
+
+    public function medicalrecord()
+    {
+        return $this->hasOne('App\MedicalRecord', 'appointment_id');
     }
 
 }

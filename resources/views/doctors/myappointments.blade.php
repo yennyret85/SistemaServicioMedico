@@ -33,20 +33,35 @@
                                 <td>{{ $appointment->appointment_time }}</td>
                                 <td>{{ $appointment->patient->name." ".$appointment->patient->lastname." | C.I. ".$appointment->patient->idcard }}</td>
                                 <td>{{ $appointment->status }}</td>
+                                <!--
                                 <td>
                                     @if(Auth::user()->hasPermissionTo('VerRecipe'))
                                         <a href="{{ url('/recipes') }}" class="btn btn-primary" title="Ver Recipes" ><i class="fa fa-vcard"></i>
                                         </a>
                                     @endif
                                 </td>
+                                -->
                                 <td>
-                                    @if(Auth::user()->hasPermissionTo('VerHistoriaMedica'))
-                                        <a href="{{ url('/medicalrecords') }}" class="btn btn-success" title="Ver Historia Médica"><i class="fa fa-h-square"></i></a>
+                                    @if(Auth::user()->hasPermissionTo('CrearHistoriaMedica'))
+                                        <a href="{{ url('/medicalrecords/create/'.$appointment->id) }}" class="btn btn-success" title="Crear Historia Médica"><i class="fa fa-h-square"></i></a>
                                     @endif
                                 </td>
                                 <td>
+                                    @if(Auth::user()->hasPermissionTo('EditarHistoriaMedica') && $appointment->medicalrecord)
+                                        <a href="{{ url('/medicalrecords/'.$appointment->medicalrecord->id.'/edit') }}" class="btn btn-success" title="Modificar Historia Médica"><i class="fa fa-edit"></i></a>
+                                    @else
+                                        <button class="btn btn-success" title="Modificar Historia Médica" disabled><i class="fa fa-edit"></i></button>
+                                    @endif
+                                </td>
+
+                                <td>
                                     @if(Auth::user()->hasPermissionTo('ConcluirCita'))
-                                        <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Concluir Cita"><i class="fa fa-calendar-times-o"></i></a>
+                                        <form role="form" method="POST" action="{{ url('/appointments/'.$appointment->id.'/status') }}">
+                                            {{ method_field('PUT') }}
+                                            {{ csrf_field() }}
+                                            <button type="submit" class="btn btn-danger" title="Concluir Cita"><i class="fa fa-calendar-times-o"></i></button>
+                                        </form>
+                                        
                                     @endif
                                 </td>
                             </tr>

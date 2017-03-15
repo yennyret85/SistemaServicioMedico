@@ -79,8 +79,8 @@
                                 <li><a href="{{ url('/medicalrecords') }}">Historias Médicas</a></li>
                             @endhasrole
                             @hasrole('Farmaceuta')
-                                <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
                                 <li><a href="{{ url('/recipes') }}">Recipes</a></li>
+                                <li><a href="{{ url('/medicines') }}">Medicinas</a></li>
                             @endhasrole
                             @hasrole('Paciente')
                                 <li><a href="{{ url('/myappointments') }}">Mis Citas</a></li>

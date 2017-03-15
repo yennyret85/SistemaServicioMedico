@@ -21,12 +21,14 @@ Route::get('/home', 'HomeController@index');
 
 Route::resource('/users', 'UsersController');
 Route::resource('/appointments', 'AppointmentsController');
-Route::resource('/medicalrecords', 'MedicalRecordsController');
 Route::resource('/recipes', 'RecipesController');
 Route::resource('/roles', 'RolesController');
 Route::resource('/permissions', 'PermissionsController');
 Route::resource('/medicines', 'MedicinesController');
 Route::resource('/specialties', 'SpecialtiesController');
+Route::resource('/medicalrecords', 'MedicalRecordsController');
+
+Route::get('/medicalrecords/create/{id}', 'MedicalRecordsController@create');
 
 Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
 Route::get('/doctors','UsersController@doctors');

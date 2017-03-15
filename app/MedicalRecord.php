@@ -8,23 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MedicalRecord extends Model
 {
+
+    use SoftDeletes;
+    
+    protected $table= "medicalrecords";
+    
     protected $fillable = [
-    	'medical_record_date', 'patient_id', 'specialty_id', 'doctor_id', 'appointment_id', 'medical_report',
+    	'appointment_id', 'reasonforappointment', 'physicalevaluation', 'medicalreport'
     ];
 
-    public function specialty()
+    public function appointment()
     {
-        return $this->belongsTo('App\Specialty', 'specialty_id');
+        return $this->belongsTo('App\Appointment', 'appointment_id');
     }
 
     public function recipe()
     {
         return $this->hasOne('App\Recipe', 'recipe_id');
-    }
-
-    public function appointment()
-    {
-        return $this->belongsTo('App\Appointment', 'appointment_id');
     }
     
 }

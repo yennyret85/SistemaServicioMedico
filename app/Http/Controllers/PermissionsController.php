@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-
 use Validator;
 
 class PermissionsController extends Controller
@@ -29,7 +29,7 @@ class PermissionsController extends Controller
      */
     public function create()
     {
-        if(!Auth::user()->can('CrearPermiso'))
+        if(!Auth::user()->hasPermissionTo('CrearPermiso'))
             abort(403, 'Acceso Prohibido');
 
         return view('permissions.create');
@@ -87,7 +87,7 @@ class PermissionsController extends Controller
      */
     public function edit($id)
     {
-        if(!Auth::user()->can('EditarPermiso'))
+        if(!Auth::user()->hasPermissionTo('EditarPermiso'))
             abort(403, 'Acceso Prohibido');
 
         $permission = Permission::findOrFail($id);
@@ -137,7 +137,7 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
-        if(!Auth::user()->can('EliminarPermiso'))
+        if(!Auth::user()->hasPermissionTo('EliminarPermiso'))
             abort(403, 'Acceso Prohibido');
 
         try{
