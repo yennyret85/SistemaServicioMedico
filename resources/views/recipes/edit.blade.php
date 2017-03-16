@@ -17,35 +17,34 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <strong>Crear Recipe</strong>
+                        <strong>Modificar Recipe</strong>
                     </div>
 
                     <div class="panel-body">
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/recipes') }}">
-                            {{ method_field('POST') }}
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/recipes/'.$recipe->id) }}">
+                            {{ method_field('PUT') }}
                             {{ csrf_field() }}
 
                         <div class="form-group">
                             <label for="doctor" class="col-md-4 control-label">Médico</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $medicalrecord->appointment->doctor->name." ".$medicalrecord->appointment->doctor->lastname." (".$medicalrecord->appointment->doctor->specialty->name.")" }}" readonly>
-                                <input type="hidden" name="medicalrecord_id" id="medicalrecord_id" value="{{ $medicalrecord->id }}">
+                                <input type="text" class="form-control"  value="{{ $recipe->medicalrecord->appointment->doctor->name." ".$recipe->medicalrecord->appointment->doctor->lastname." (".$recipe->medicalrecord->appointment->doctor->specialty->name.")" }}" readonly>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="patient" class="col-md-4 control-label">Paciente</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $medicalrecord->appointment->patient->name." ".$medicalrecord->appointment->patient->lastname." | C.I. ".$medicalrecord->appointment->patient->idcard }}" readonly>
+                                <input type="text" class="form-control"  value="{{ $recipe->medicalrecord->appointment->patient->name." ".$recipe->medicalrecord->appointment->patient->lastname." | C.I. ".$recipe->medicalrecord->appointment->patient->idcard }}" readonly>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('medicines') ? ' has-error' : '' }}">
-                            <label for="medicines" class="col-md-4 control-label">Agregar Medicinas</label>
+                            <label for="medicines" class="col-md-4 control-label"> Medicinas</label>
                             <div class="col-md-6">
                                 <select name="medicines[]" id="medicines" class="form-control selectpicker" multiple data-max-options="5" data-live-search="true" autofocus>
                                     @foreach($medicines as $medicine)
-                                        <option value="{{ $medicine->id }}">
+                                        <option value="{{ $medicine->id }}" @if(in_array($medicine->id, $recipe->medicines->pluck('id')->toArray())) selected @endif>
                                         {{ $medicine->name }}</option>
                                     @endforeach
                                 </select>
@@ -62,7 +61,7 @@
                             <label for="indications" class="col-md-4 control-label">Indicaciones</label>
 
                             <div class="col-md-6">
-                                <textarea name="indications" id="indications" cols="50" rows="8">{{ old('indications') }}</textarea>
+                                <textarea name="indications" id="indications" cols="50" rows="8">{{ $recipe->indications or old('indications') }}</textarea>
                                 @if($errors->has('indications'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('indications') }}</strong>

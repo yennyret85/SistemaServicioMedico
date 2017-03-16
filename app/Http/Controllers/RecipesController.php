@@ -69,7 +69,6 @@ class RecipesController extends Controller
             $recipe->medicines()->sync($request->input('medicines'));
 
         } catch (\Exception $e) {
-            var_dump($e);
             \DB::rollback();
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
@@ -102,7 +101,7 @@ class RecipesController extends Controller
 
         $medicines = Medicine::all();
         $recipe = Recipe::findOrFail($id);
-        return view('recipes.create', ['medicines'=>$medicines, 'recioe'=>$recipe]);
+        return view('recipes.edit', ['medicines'=>$medicines, 'recipe'=>$recipe]);
     }
 
     /**
@@ -127,14 +126,13 @@ class RecipesController extends Controller
 
             $recipe = Recipe::findOrFail($id);
 
-            $recipe = Recipe::update([
+            $recipe->update([
                 'indications'=> $request->input('indications'),
             ]);
 
             $recipe->medicines()->sync($request->input('medicines'));
 
         } catch (\Exception $e) {
-            var_dump($e);
             \DB::rollback();
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
