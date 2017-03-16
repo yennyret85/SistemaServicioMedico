@@ -35,7 +35,11 @@ Route::get('/recipes/create/{id}', 'RecipesController@create');
 
 Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
 Route::get('/doctors','UsersController@doctors');
+
 Route::get('/myappointments', 'AppointmentsController@vermiscitas'); //VerMisCitas/Med/Pac
+
+Route::get('/myrecipes', 'RecipesController@vermisrecipes'); 
+
 
 Route::get('/users/{id}/permissions','UsersController@permissions');
 Route::put('/users/{id}/asignarpermisos','UsersController@asignarPermisos');

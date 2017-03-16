@@ -47,7 +47,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Appointment', 'patient_id');
     }
 
-public function appointments_doctor()
+    public function appointments_doctor()
     {
         return $this->hasMany('App\Appointment', 'doctor_id');
     }

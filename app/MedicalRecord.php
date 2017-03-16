@@ -24,7 +24,7 @@ class MedicalRecord extends Model
 
     public function recipe()
     {
-        return $this->hasOne('App\Recipe', 'recipe_id');
+        return $this->hasOne('App\Recipe', 'medicalrecord_id');
     }
     
 }

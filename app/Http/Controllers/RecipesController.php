@@ -66,7 +66,7 @@ class RecipesController extends Controller
                 'indications'=> $request->input('indications'),
             ]);
 
-            //$recipe->medicines()->sync($request->input('medicines'));
+            $recipe->medicines()->sync($request->input('medicines'));
 
         } catch (\Exception $e) {
             var_dump($e);
@@ -97,7 +97,12 @@ class RecipesController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(!Auth::user()->hasPermissionTo('EditarRecipe'))
+            abort(403, 'Acceso Prohibido');
+
+        $medicines = Medicine::all();
+        $recipe = Recipe::findOrFail($id);
+        return view('recipes.create', ['medicines'=>$medicines, 'recioe'=>$recipe]);
     }
 
     /**
@@ -109,7 +114,33 @@ class RecipesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $v = Validator::make($request->all(), [
+            'indications' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            $recipe = Recipe::findOrFail($id);
+
+            $recipe = Recipe::update([
+                'indications'=> $request->input('indications'),
+            ]);
+
+            $recipe->medicines()->sync($request->input('medicines'));
+
+        } catch (\Exception $e) {
+            var_dump($e);
+            \DB::rollback();
+            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/myappointments')->with('mensaje', 'Recipe Modificado con Éxito');
     }
 
     /**

@@ -149,7 +149,7 @@ class MedicalRecordsController extends Controller
         } finally {
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica ha sido Modificado Exitosamente');
+        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica Modificado Exitosamente');
     }
 
     /**

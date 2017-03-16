@@ -16,15 +16,15 @@ class Recipe extends Model
     ];
 
     public function medicines(){
-    	return $this->bellongsToMany('App\Medicine', 'medicine_id');
+    	return $this->belongsToMany('App\Medicine', 'recipes_medicines');
     }
 
     public function pharmacist(){
-    	return $this->bellongsTo('App\User', 'pharmacist_id');
+    	return $this->belongsTo('App\User', 'pharmacist_id');
     }
 
     public function medicalrecord(){
-        return $this->bellongsTo('App\MedicalRecord', 'medicalrecord_id');
+        return $this->belongsTo('App\MedicalRecord', 'medicalrecord_id');
     }
     
 }

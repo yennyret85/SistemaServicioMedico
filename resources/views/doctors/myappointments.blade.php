@@ -50,22 +50,21 @@
                                 </td>
 
                                 <td>
-                                    @if(Auth::user()->hasPermissionTo('CrearRecipe') && $appointment->medicalrecord)
+                                    @if(Auth::user()->hasPermissionTo('CrearRecipe') && $appointment->medicalrecord && !$appointment->medicalrecord->recipe)
                                         <a href="{{ url('/recipes/create/'.$appointment->medicalrecord->id) }}" class="btn btn-primary" title="Crear Recipe"><i class="fa fa-file-text"></i></a>
                                     @else
                                         <button class="btn btn-info" title="Crear Recipe" disabled><i class="fa fa-file-text"></i></button>
                                     @endif
                                 </td>
-                                <!--
+                                
                                 <td>
-                                    @if(Auth::user()->hasPermissionTo('EditarRecipe') && $appointment->medicalrecord )
-                                        <a href="{{ url('/recipes/'.$appointment->medicalrecord->id.'/edit') }}" class="btn btn-primary" title="Modificar Recipe"><i class="fa fa-file-text-o"></i></a>
+                                    @if(Auth::user()->hasPermissionTo('EditarRecipe') && $appointment->medicalrecord && $appointment->medicalrecord->recipe )
+                                        <a href="{{ url('/recipes/'.$appointment->medicalrecord->recipe->id.'/edit') }}" class="btn btn-primary" title="Modificar Recipe"><i class="fa fa-file-text-o"></i></a>
                                     @else
                                         <button class="btn btn-info" title="Modificar Recipe" disabled><i class="fa fa-file-text-o"></i></button>
                                     @endif
                                 </td>
-                                -->
-
+                                
                                 <td>
                                     @if(Auth::user()->hasPermissionTo('ConcluirCita') && $appointment->medicalrecord)
                                         <form role="form" method="POST" action="{{ url('/appointments/'.$appointment->id.'/status') }}">

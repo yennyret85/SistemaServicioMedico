@@ -19,6 +19,6 @@ class Medicine extends Model
 
     public function recipe()
     {
-        return $this->belongsToMany('App\Recipe', 'recipe_id');
+        return $this->belongsToMany('App\Recipe');
     }
 }
