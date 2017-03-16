@@ -160,7 +160,7 @@ class RolesController extends Controller
         }finally{
             \DB::commit();
         }
-        return redirect('/roles')->with('mensaje', 'Rol ha sido eliminado con exito');
+        return redirect('/roles')->with('mensaje', 'Rol eliminado con éxito');
     }
 
     public function permissions($id){

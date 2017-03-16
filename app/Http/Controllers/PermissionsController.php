@@ -149,6 +149,6 @@ class PermissionsController extends Controller
         }finally{
             \DB::commit();
         }
-        return redirect('/permissions')->with('mensaje', 'Permiso ha sido eliminado con exito');
+        return redirect('/permissions')->with('mensaje', 'Permiso eliminado con exito');
     }
 }

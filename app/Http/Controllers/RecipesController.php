@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Recipe;
+use App\MedicalRecord;
+use App\Medicine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,9 +30,14 @@ class RecipesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        //
+        if(!Auth::user()->hasPermissionTo('CrearRecipe'))
+            abort(403, 'Acceso Prohibido');
+
+        $medicalrecord = MedicalRecord::findOrFail($id);
+        $medicines = Medicine::all();
+        return view('recipes.create', ['medicines'=>$medicines, 'medicalrecord'=>$medicalrecord]);
     }
 
     /**
@@ -41,7 +48,34 @@ class RecipesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $v = Validator::make($request->all(), [
+            'medicalrecord_id' =>'required',
+            'indications' => 'required',
+        ]);
+
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try {
+            \DB::beginTransaction();
+
+            $recipe = Recipe::create([
+                'medicalrecord_id'=>$request->input('medicalrecord_id'),
+                'indications'=> $request->input('indications'),
+            ]);
+
+            //$recipe->medicines()->sync($request->input('medicines'));
+
+        } catch (\Exception $e) {
+            var_dump($e);
+            \DB::rollback();
+            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/myappointments')->with('mensaje', 'Recipe creado con Éxito');
     }
 
     /**
@@ -86,6 +120,18 @@ class RecipesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Auth::user()->hasPermissionTo('EliminarRecipe'))
+            abort(403, 'Permiso Denegado.');
+
+        try{
+            \DB::beginTransaction();
+            Appointment::destroy($id);
+        }catch(\Exception $e){
+            \DB::rollback();
+            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        }finally{
+            \DB::commit();
+        }
+        return redirect('/myappointments')->with('mensaje', 'Recipe eliminado satisfactoriamente');
     }
 }

@@ -37,7 +37,7 @@
                                 <label for="reasonforappointment" class="col-md-4 control-label">Motivo de la Consulta</label>
 
                                 <div class="col-md-6">
-                                    <textarea name="reasonforappointment" id="reasonforappointment" cols="50" rows="5" autofocus>{{ old('reasonforappointment') }}</textarea>
+                                    <textarea name="reasonforappointment" id="reasonforappointment" cols="50" rows="5" autofocus>{{old('reasonforappointment') }}</textarea>
                                     @if($errors->has('reasonforappointment'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('reasonforappointment') }}</strong>
@@ -71,6 +71,7 @@
                                     @endif
                                 </div>
                             </div>
+                            
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                     <button type="submit" class="btn btn-primary">

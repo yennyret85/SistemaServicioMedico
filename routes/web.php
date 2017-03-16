@@ -27,8 +27,11 @@ Route::resource('/permissions', 'PermissionsController');
 Route::resource('/medicines', 'MedicinesController');
 Route::resource('/specialties', 'SpecialtiesController');
 Route::resource('/medicalrecords', 'MedicalRecordsController');
+Route::resource('/recipes', 'RecipesController');
 
 Route::get('/medicalrecords/create/{id}', 'MedicalRecordsController@create');
+Route::get('/recipes/create/{id}', 'RecipesController@create');
+
 
 Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
 Route::get('/doctors','UsersController@doctors');

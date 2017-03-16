@@ -16,7 +16,9 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Crear Recipe</div>
+                    <div class="panel-heading">
+                        <strong>Crear Recipe</strong>
+                    </div>
 
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/recipes') }}">
@@ -24,31 +26,60 @@
                             {{ csrf_field() }}
 
                         <div class="form-group">
-                            <label for="doctor" class="col-md-4 control-label">Medico</label>
+                            <label for="doctor" class="col-md-4 control-label">Médico</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $doctor->name." ".$doctor->lastname." (".$doctor->specialty->name.")" }}" readonly>
+                                <input type="text" class="form-control"  value="{{ $medicalrecord->appointment->doctor->name." ".$medicalrecord->appointment->doctor->lastname." (".$medicalrecord->appointment->doctor->specialty->name.")" }}" readonly>
+                                <input type="hidden" name="medicalrecord_id" id="medicalrecord_id" value="{{ $medicalrecord->id }}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="patient" class="col-md-4 control-label">Paciente</label>
                             <div class="col-md-6">
-                                <input type="text" class="form-control"  value="{{ $patient->name." ".$patient->lastname." | C.I. ".$patient->idcard }}" readonly>
+                                <input type="text" class="form-control"  value="{{ $medicalrecord->appointment->patient->name." ".$medicalrecord->appointment->patient->lastname." | C.I. ".$medicalrecord->appointment->patient->idcard }}" readonly>
                             </div>
                         </div>
 
-                        
+                        <div class="form-group{{ $errors->has('medicines') ? ' has-error' : '' }}">
+                            <label for="medicines" class="col-md-4 control-label">Agregar Medicinas</label>
+                            <!--
+                            <div class="col-md-6">
+                                <select name="medicines[]" id="medicines" class="form-control selectpicker" multiple data-max-options="5" data-live-search="true" autofocus>
+                                    @foreach($medicines as $medicine)
+                                        <option value="{{ $medicine->name }}" @if(old('medicine')==$medicine->name) selected @endif>
+                                        {{ $medicine->name or old('medicine->name')}}</option>
+                                    @endforeach
+                                </select>
 
-
-
-
-                            <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Guardar
-                                    </button>
-                                </div>
+                                @if ($errors->has('medicines'))
+                                    <span class="help-block">
+                                    <strong>{{ $errors->first('medicines') }}</strong>
+                                </span>
+                                @endif
                             </div>
+                            -->
+                        </div>
+
+                        <div class="form-group{{ $errors->has('indications') ? ' has-error' : '' }}">
+                            <label for="indications" class="col-md-4 control-label">Indicaciones</label>
+
+                            <div class="col-md-6">
+                                <textarea name="indications" id="indications" cols="50" rows="8">{{ old('indications') }}</textarea>
+                                @if($errors->has('indications'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('indications') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
                         </form>
                     </div>
                 </div>

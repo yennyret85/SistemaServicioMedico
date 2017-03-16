@@ -11,13 +11,11 @@ class Recipe extends Model
 
     use SoftDeletes;
 
-    protected $table= "recipes";
-
     protected $fillable = [
     	'status', 'pharmacist_id', 'medicalrecord_id', 'indications'
     ];
 
-    public function medicine(){
+    public function medicines(){
     	return $this->bellongsToMany('App\Medicine', 'medicine_id');
     }
 

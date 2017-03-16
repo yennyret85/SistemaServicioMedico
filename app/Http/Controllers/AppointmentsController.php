@@ -76,11 +76,11 @@ class AppointmentsController extends Controller
                 'specialty_id' => $doctor->specialty_id,
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
-                'status' => ($request->input('status')!='')?$request->input('status'):'Asignada',
             ]);
+            
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Se sugiere verificar que el paciente no tenga asignada una cita con el mismo doctor en la fecha seleccionada');
         } finally {
             \DB::commit();
         }
@@ -142,14 +142,12 @@ class AppointmentsController extends Controller
             $appointment = Appointment::findOrFail($id);
 
             $appointment->update([
-                //'patient_id' => $request->input('patient_id'),
-                //'doctor_id' => $doctor->id,
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
             ]);
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Verifique que el paciente no tenga asignada una cita en la fecha seleccionada con el mismo doctor');
         } finally {
             \DB::commit();
         }
@@ -176,7 +174,7 @@ class AppointmentsController extends Controller
         }finally{
             \DB::commit();
         }
-        return redirect('/appointments')->with('mensaje', 'Cita ha sido eliminada satisfactoriamente');
+        return redirect('/appointments')->with('mensaje', 'Cita eliminada satisfactoriamente');
     }
 
     public function vistastatus($id)

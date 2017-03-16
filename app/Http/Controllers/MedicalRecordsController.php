@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+
 use Validator;
  
 
@@ -76,18 +77,6 @@ class MedicalRecordsController extends Controller
                 'medicalreport' => $request->input('medicalreport'),
             ]);
 
-            /*
-            $recipe= Recipe::create([
-                'medicalrecord_id'=>$medicalrecord->id,
-                'status'=>($request->input('status') != '') ? $request->input('status') : 'Activo',
-                'medicine_id'=> $request->input('medicine_id')->nullable(),
-                'indications'=> $request->input('indications'),
-            ]);
-
-            $recipe->medicines->sync($request->input('medicine_id'));
-
-            */
-
         } catch (\Exception $e) {
             \DB::rollback();
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
@@ -116,7 +105,6 @@ class MedicalRecordsController extends Controller
      */
     public function edit($id)
     {
-        
         if (!Auth::user()->hasPermissionTo('EditarHistoriaMedica'))
             abort(403, 'Acceso Prohibido');
 
@@ -155,18 +143,6 @@ class MedicalRecordsController extends Controller
                 'medicalreport' => $request->input('medicalreport'),
             ]);
 
-            /*
-            $recipe= Recipe::create([
-                'medicalrecord_id'=>$medicalrecord->id,
-                'status'=>($request->input('status') != '') ? $request->input('status') : 'Activo',
-                'medicine_id'=> $request->input('medicine_id')->nullable(),
-                'indications'=> $request->input('indications'),
-            ]);
-
-            $recipe->medicines->sync($request->input('medicine_id'));
-
-            */
-
         } catch (\Exception $e) {
             \DB::rollback();
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
@@ -196,7 +172,7 @@ class MedicalRecordsController extends Controller
         }finally{
             \DB::commit();
         }
-        return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica eliminada Exitosamente');
+        return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica eliminado Exitosamente');
     }
 
 }
