@@ -55,7 +55,7 @@
                                 @endif
                                 @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
                                 <td>
-                                <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Cambiar Status Cita">
+                                    <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Cambiar Status Cita">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                 </td>

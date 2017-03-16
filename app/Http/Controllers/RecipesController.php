@@ -65,11 +65,13 @@ class RecipesController extends Controller
                 'medicalrecord_id'=>$request->input('medicalrecord_id'),
                 'indications'=> $request->input('indications'),
             ]);
-
-            $recipe->medicines()->sync($request->input('medicines'));
+            if(count($request->input('medicines'))>0){
+                $recipe->medicines()->sync($request->input('medicines'));                
+            }
 
         } catch (\Exception $e) {
             \DB::rollback();
+            var_dump($e);
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
@@ -130,15 +132,25 @@ class RecipesController extends Controller
                 'indications'=> $request->input('indications'),
             ]);
 
-            $recipe->medicines()->sync($request->input('medicines'));
+            if(count($request->input('medicines'))>0){
+                $recipe->medicines()->sync($request->input('medicines'));                
+            }
 
         } catch (\Exception $e) {
             \DB::rollback();
+            if(Auth::user()->hasRole('Medico'))
             return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        else
+            return redirect('/recipes')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+
         } finally {
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Recipe Modificado con Éxito');
+        if(Auth::user()->hasRole('Medico'))
+            return redirect('/myappointments')->with('mensaje', 'Recipe Modificado con Éxito');
+        else
+            return redirect('/recipes')->with('mensaje', 'Recipe Modificado con Éxito');
+
     }
 
     /**
@@ -149,18 +161,53 @@ class RecipesController extends Controller
      */
     public function destroy($id)
     {
-        if (!Auth::user()->hasPermissionTo('EliminarRecipe'))
+        if (!Auth::user()->hasRole('Administrador'))
             abort(403, 'Permiso Denegado.');
 
         try{
             \DB::beginTransaction();
-            Appointment::destroy($id);
+            Recipe::destroy($id);
         }catch(\Exception $e){
             \DB::rollback();
-            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            return redirect('/recipes')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         }finally{
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Recipe eliminado satisfactoriamente');
+        return redirect('/recipes')->with('mensaje', 'Recipe eliminado satisfactoriamente');
+    }
+
+    public function vistastatusrecipe($id)
+    {
+        $recipe = Recipe::findOrFail($id);
+        $status = ['Activo', 'Entregado', 'Cancelado'];
+        return view('recipes.statusrecipes', ['recipe'=>$recipe, 'status'=>$status]);
+    }
+
+    public function cambiarstatusrecipe(Request $request, $id)
+    {
+        $recipe = Recipe::findOrFail($id);
+        $status = ['Activo', 'Entregado', 'Cancelado'];
+
+        $v = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+        if ($v->fails()) {
+            return redirect()->back()->withErrors($v)->withInput();
+        }
+
+        try { 
+            \DB::beginTransaction();
+
+            $recipe = Recipe::findOrFail($id);
+            $recipe->update([
+                'status' => $request->input('status'),
+            ]);
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+        } finally {
+            \DB::commit();
+        }
+        return redirect('/recipes')->with('mensaje', 'Cambio de Status de Recipe realizado satisfactoriamente');
     }
 }

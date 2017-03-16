@@ -47,3 +47,6 @@ Route::put('/roles/{id}/asignarpermisos','RolesController@asignarPermisos');
 
 Route::get('/appointments/{id}/status', 'AppointmentsController@vistastatus');
 Route::put('/appointments/{id}/status', 'AppointmentsController@cambiarstatus');
+
+Route::get('/recipes/{id}/status', 'RecipesController@vistastatusrecipe');
+Route::put('/recipes/{id}/status', 'RecipesController@cambiarstatusrecipe');
