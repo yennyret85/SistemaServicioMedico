@@ -25,7 +25,7 @@ class AppointmentsController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::paginate();
+        $appointments = Appointment::orderBy('status')->orderBy('appointment_date')->paginate();
         return view('appointments.index', ['appointments'=>$appointments]);
     }
 

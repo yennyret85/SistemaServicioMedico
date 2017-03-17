@@ -53,23 +53,26 @@
                                     </a>
                                 </td>
                                 @endif
-                                @if(Auth::user()->hasPermissionTo('CrearHistoriaMedica') && !$appointment->medicalrecord )
-                                    <td>
-                                        <a href="{{ url('/medicalrecords/create/'.$appointment->id) }}" class="btn btn-success" title="Crear Historia Médica"><i class="fa fa-h-square"></i></a>
-                                    </td>
-                                    @else
-                                    <td>
-                                        <button class="btn btn-success" title="Crear Historia Médica" disabled><i class="fa fa-h-square"></i></button>
-                                    </td>
-                                @endif
-                                @if(Auth::user()->hasPermissionTo('CrearRecipe') && $appointment->medicalrecord && !$appointment->medicalrecord->recipe)
-                                    <td>
-                                        <a href="{{ url('/recipes/create/'.$appointment->medicalrecord->id) }}" class="btn btn-primary" title="Crear Recipe"><i class="fa fa-file-text"></i></a>
-                                    </td>
-                                    @else
-                                    <td>
-                                        <button class="btn btn-info" title="Crear Recipe" disabled><i class="fa fa-file-text"></i></button>   
-                                    </td>
+                                @if(!Auth::user()->hasRole('Secretaria'))
+                                    @if(Auth::user()->hasPermissionTo('CrearHistoriaMedica') && !$appointment->medicalrecord )
+                                        <td>
+                                            <a href="{{ url('/medicalrecords/create/'.$appointment->id) }}" class="btn btn-success" title="Crear Historia Médica"><i class="fa fa-h-square"></i></a>
+                                        </td>
+                                        @else
+                                        <td>
+                                            <button class="btn btn-success" title="Crear Historia Médica" disabled><i class="fa fa-h-square"></i></button>
+                                        </td>
+                                    @endif
+                                
+                                    @if(Auth::user()->hasPermissionTo('CrearRecipe') && $appointment->medicalrecord && !$appointment->medicalrecord->recipe)
+                                        <td>
+                                            <a href="{{ url('/recipes/create/'.$appointment->medicalrecord->id) }}" class="btn btn-primary" title="Crear Recipe"><i class="fa fa-file-text"></i></a>
+                                        </td>
+                                        @else
+                                        <td>
+                                            <button class="btn btn-info" title="Crear Recipe" disabled><i class="fa fa-file-text"></i></button>   
+                                        </td>
+                                    @endif
                                 @endif
                                     @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
                                 <td>

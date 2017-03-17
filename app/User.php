@@ -38,16 +38,16 @@ class User extends Authenticatable
 
     public function appointments_patient()
     {
-        return $this->hasMany('App\Appointment', 'patient_id');
+        return $this->hasMany('App\Appointment', 'patient_id')->orderBy('appointment_date');
     }
 
     public function appointments_doctor()
     {
-        return $this->hasMany('App\Appointment', 'doctor_id');
+        return $this->hasMany('App\Appointment', 'doctor_id')->orderBy('appointment_date');
     }
 
     public function recipe()
     {
-        return $this->hasMany('App\Recipe', 'recipe_id');
+        return $this->hasMany('App\Recipe', 'recipe_id')->orderBy('appointment_date');
     }
 }

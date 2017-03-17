@@ -20,7 +20,7 @@ class RecipesController extends Controller
      */
     public function index()
     {
-        $recipes = Recipe::paginate();
+        $recipes = Recipe::orderBy('status')->paginate();
         return view('recipes.index', ['recipes'=>$recipes]);
     }
 

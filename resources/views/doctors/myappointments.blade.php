@@ -27,7 +27,7 @@
                                 <th>Status</th>
                                 <th width="10%" colspan="5">Acciones</th>
                             </tr>
-                            @foreach(Auth::user()->appointments_doctor as $appointment)
+                            @foreach(Auth::user()->appointments_doctor->where('status','=', 'Asignada') as $appointment)
                             <tr>
                                 <td>{{ $appointment->appointment_date }}</td>
                                 <td>{{ $appointment->appointment_time }}</td>

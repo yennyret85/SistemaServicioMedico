@@ -192,12 +192,14 @@ class MedicalRecordsController extends Controller
         return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica eliminado Exitosamente');
     }
 
-    public function verhistoriamedica()
+    public function verhistoriamedica($id)
     {
         if(!Auth::user()->hasPermissionTo('VerHistoriaMedica'))
             abort(403, 'Permiso Denegado.');
 
-            return view('medicalrecords.viewmedicalrecord');
+        $medicalrecord = MedicalRecord::findOrFail($id);    
+
+        return view('medicalrecords.viewmedicalrecord', ['medicalrecord'=>$medicalrecord]);
     }
 
 }

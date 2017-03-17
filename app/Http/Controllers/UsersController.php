@@ -156,8 +156,10 @@ class UsersController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v)->withInput();
         }
-
         
+        try {
+            \DB::beginTransaction();
+
             $user = User::findOrFail($id);
 
             $user->update([
@@ -170,7 +172,7 @@ class UsersController extends Controller
                 'cellphone' => $request->input('cellphone'),
                 'address' => $request->input('address'),
                 'email' => $request->input('email'),
-                'specialty_id' => $request->input('specialty'),
+                'specialty_id' => ($request->input('specialty')!='')?$request->input('specialty'):NULL,
             ]);
 
             if($request->input('password')){
@@ -191,10 +193,15 @@ class UsersController extends Controller
             if (!Auth::user()->hasRole('Secretaria'))
                 $user->syncRoles($request->input('role'));
 
-        
+        }catch (\Exception $e){
+             \DB::rollback();
+             return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+         }finally{
+             \DB::commit();
+        }
         
         return redirect('/users')->with('mensaje', 'Usuario actualizado satisfactoriamente');
-    } //*
+    } 
 
     /**
      * Remove the specified resource from storage.

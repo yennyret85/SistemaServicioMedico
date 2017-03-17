@@ -17,13 +17,12 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <strong>Módulo Historias Médicas</strong>
+                        <strong>Listado de Registros de Historias Médicas</strong>
                     </div>
                         <div class="panel-body">
-                        	<strong>Listado de Historias Médicas</strong>
                         <table class="table table-bordered">
                             <tr>
-                                <th>Fecha de Creación</th>
+                                <th>Fecha de la Cita</th>
                                 <th>Paciente</th>
                                 <th>Doctor</th>
                                 <th width="10%" colspan="4">Acciones</th>
