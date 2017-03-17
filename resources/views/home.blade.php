@@ -12,7 +12,7 @@
                 -->
 
                 <div class="panel-body" id="home">
-                    <h1>Bienvenido al Sistema de Servicio Médico</h1>
+                    <h1>Sistema de Servicio Médico</h1>
                 </div>
             </div>
         </div>
