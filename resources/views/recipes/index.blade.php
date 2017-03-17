@@ -38,14 +38,18 @@
                                         <td>
                                             <a href="{{ url('/recipes/'.$recipe->id.'/verrecipe') }}" class="btn btn-success" title="Ver Recipe"><i class="fa fa-file-text"></i></a>
                                         </td>
-                                    @else(Auth::user()->hasPermissionTo('VerRecipe'))
+                                    @else
                                         <td>
                                             <button class="btn btn-success" title="Ver Recipe" disabled><i class="fa fa-file-text"></i></button>
                                         </td>
                                     @endif
-		                            @if(Auth::user()->hasPermissionTo('EditarRecipe'))
+		                            @if(Auth::user()->hasPermissionTo('EditarRecipe') && ($recipe->status)=='Activo' )
                                         <td>
 		                            		<a href="{{ url('/recipes/'.$recipe->id.'/edit') }}" class="btn btn-primary" title="Modificar Recipe"><i class="fa fa-file-text-o"></i></a>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <button class="btn btn-primary" title="Modificar Recipe" disabled><i class="fa fa-file-text-o"></i></button>
                                         </td>
 		                            @endif
 		                            @if(Auth::user()->hasPermissionTo('CambiarStatusRecipe'))
