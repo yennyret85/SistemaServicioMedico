@@ -7,7 +7,6 @@ use App\MedicalRecord;
 use App\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -79,11 +78,17 @@ class MedicalRecordsController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            if(Auth::user()->hasRole('Medico'))
+                return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            else
+                return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica creado con Éxito');
+        if(Auth::user()->hasRole('Medico'))
+            return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica creado con Éxito');
+        else
+            return redirect('/appointments')->with('mensaje', 'Registro de Historia Médica creado con Éxito');
     }
 
     /**
@@ -145,11 +150,18 @@ class MedicalRecordsController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            if(Auth::user()->hasRole('Medico'))
+                return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            else
+                return redirect('/medicalrecords')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica Modificado Exitosamente');
+
+        if(Auth::user()->hasRole('Medico'))
+            return redirect('/myappointments')->with('mensaje', 'Registro de Historia Médica Modificado Exitosamente');
+        else
+            return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica Modificado Exitosamente');
     }
 
     /**
@@ -165,7 +177,12 @@ class MedicalRecordsController extends Controller
 
         try{
             \DB::beginTransaction();
-            Appointment::destroy($id);
+            $medicalrecord = MedicalRecord::findOrFail($id);
+            if ($medicalrecord->recipe) {
+                $medicalrecord->recipe->medicines()->sync([]);
+                $medicalrecord->recipe->destroy($medicalrecord->recipe->id);
+            }
+            $medicalrecord->destroy($id);
         }catch(\Exception $e){
             \DB::rollback();
             return redirect('/medicalrecords')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
@@ -173,6 +190,14 @@ class MedicalRecordsController extends Controller
             \DB::commit();
         }
         return redirect('/medicalrecords')->with('mensaje', 'Registro de Historia Médica eliminado Exitosamente');
+    }
+
+    public function verhistoriamedica()
+    {
+        if(!Auth::user()->hasPermissionTo('VerHistoriaMedica'))
+            abort(403, 'Permiso Denegado.');
+
+            return view('medicalrecords.viewmedicalrecord');
     }
 
 }

@@ -15,7 +15,7 @@ class AlterUsersTable extends Migration
     {
         Schema::table('users', function(Blueprint $table){
            $table->integer('specialty_id')->unsigned()->after('password')->nullable();
-           $table->foreign('specialty_id')->references('id')->on('specialties');
+           $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
         });
     }
 

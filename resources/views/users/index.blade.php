@@ -14,7 +14,7 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>Módulo Usuarios</strong>
@@ -68,6 +68,11 @@
                                     </td>              
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    {{ $users->links() }}
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>

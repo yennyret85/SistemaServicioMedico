@@ -134,6 +134,11 @@
               style: 'btn-default btn-outline',
               size: 4
             });
+
+        $('.back-button').click(function(e){ //Boton Regresar
+            history.back();
+        });
+
     </script>
 </body>
 </html>

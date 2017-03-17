@@ -16,12 +16,11 @@ class CreateMedicalRecordsTable extends Migration
         Schema::create('medicalrecords', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('appointment_id')->unsigned()->unique();
-            $table->foreign('appointment_id')->references('id')->on('appointments');
+            $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->text('reasonforappointment');
             $table->text('physicalevaluation');
             $table->text('medicalreport');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

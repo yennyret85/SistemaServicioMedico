@@ -4,18 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-
 use Spatie\Permission\Traits\HasRoles;
-
 
 class User extends Authenticatable
 {
 
     use Notifiable, HasRoles;
-
-    use SoftDeletes;
 
     protected $table= "users";
 
@@ -56,5 +50,4 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Recipe', 'recipe_id');
     }
-    
 }

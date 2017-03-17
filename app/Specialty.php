@@ -3,13 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class Specialty extends Model
 {
-
-    use SoftDeletes;
 
 	protected $table = "specialties";
 
@@ -26,6 +22,5 @@ class Specialty extends Model
     {
         return $this->hasMany('App\Appointment', 'appointment_id');
     }
-
 }
 

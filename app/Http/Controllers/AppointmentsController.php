@@ -7,7 +7,6 @@ use App\Specialty;
 use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Validator;
@@ -132,11 +131,8 @@ class AppointmentsController extends Controller
         if ($v->fails()) {
             return redirect()->back()->withErrors($v)->withInput();
         }
-
-        try {
-            $doctor = Appointment::findOrFail($request->input('doctor'));
-            $patient = Appointment::findOrFail($request->input('patient'));
-
+        
+        try{
             \DB::beginTransaction();
 
             $appointment = Appointment::findOrFail($id);
@@ -145,10 +141,11 @@ class AppointmentsController extends Controller
                 'appointment_date' => $request->input('appointment_date'),
                 'appointment_time' => $request->input('appointment_time'),
             ]);
+
         } catch (\Exception $e) {
             \DB::rollback();
-            return redirect()->back()->with('mensaje', 'No se pudo procesar su solicitud. Verifique que el paciente no tenga asignada una cita en la fecha seleccionada con el mismo doctor');
-        } finally {
+                return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            } finally {
             \DB::commit();
         }
         return redirect('/appointments')->with('mensaje', 'Cita Modificada Exitosamente');
@@ -167,6 +164,14 @@ class AppointmentsController extends Controller
 
         try{
             \DB::beginTransaction();
+            $appointment = Appointment::findOrFail($id);
+            if ($appointment->medicalrecord) {
+                $medicalrecord = $appointment->medicalrecord;
+                if ($medicalrecord->recipe) {
+                    $medicalrecord->recipe->medicines()->sync([]);
+                    $medicalrecord->recipe->destroy($medicalrecord->recipe->id);
+                }
+            }
             Appointment::destroy($id);
         }catch(\Exception $e){
             \DB::rollback();

@@ -6,7 +6,6 @@ use App\User;
 use App\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Validator;
@@ -158,9 +157,7 @@ class UsersController extends Controller
             return redirect()->back()->withErrors($v)->withInput();
         }
 
-        try {
-            \DB::beginTransaction();
-
+        
             $user = User::findOrFail($id);
 
             $user->update([
@@ -194,13 +191,8 @@ class UsersController extends Controller
             if (!Auth::user()->hasRole('Secretaria'))
                 $user->syncRoles($request->input('role'));
 
-        }catch (\Exception $e){
-            echo $e->getMessage();
-            \DB::rollback();
-            return redirect('/users')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
-        }finally{
-            \DB::commit();
-        }
+        
+        
         return redirect('/users')->with('mensaje', 'Usuario actualizado satisfactoriamente');
     } //*
 

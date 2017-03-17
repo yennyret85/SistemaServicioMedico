@@ -7,7 +7,6 @@ use App\MedicalRecord;
 use App\Medicine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Validator;
@@ -71,12 +70,17 @@ class RecipesController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollback();
-            var_dump($e);
-            return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            if(Auth::user()->hasRole('Medico'))
+                return redirect('/myappointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
+            else
+                return redirect('/appointments')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
         } finally {
             \DB::commit();
         }
-        return redirect('/myappointments')->with('mensaje', 'Recipe creado con Éxito');
+        if(Auth::user()->hasRole('Medico'))
+            return redirect('/myappointments')->with('mensaje', 'Recipe creado con Éxito');
+        else
+            return redirect('/appointments')->with('mensaje', 'Recipe creado con Éxito');
     }
 
     /**
@@ -127,6 +131,7 @@ class RecipesController extends Controller
             \DB::beginTransaction();
 
             $recipe = Recipe::findOrFail($id);
+            $medicines = Medicine::all();
 
             $recipe->update([
                 'indications'=> $request->input('indications'),
@@ -166,7 +171,9 @@ class RecipesController extends Controller
 
         try{
             \DB::beginTransaction();
-            Recipe::destroy($id);
+            $recipe = Recipe::findOrFail($id);
+            $recipe->medicines()->sync([]);
+            $recipe->destroy();
         }catch(\Exception $e){
             \DB::rollback();
             return redirect('/recipes')->with('mensaje', 'No se pudo procesar su solicitud. Ocurrió un Error Inesperado');
@@ -187,20 +194,15 @@ class RecipesController extends Controller
     {
         $recipe = Recipe::findOrFail($id);
         $status = ['Activo', 'Entregado', 'Cancelado'];
-
-        $v = Validator::make($request->all(), [
-            'status' => 'required',
-        ]);
-        if ($v->fails()) {
-            return redirect()->back()->withErrors($v)->withInput();
-        }
-
+        
         try { 
             \DB::beginTransaction();
 
             $recipe = Recipe::findOrFail($id);
+            
             $recipe->update([
-                'status' => $request->input('status'),
+                'status' => ($request->input('status') !='') ? $request->input('status') : 'Activo',
+                'pharmacist_id' => Auth::user()->id,
             ]);
         } catch (\Exception $e) {
             \DB::rollback();
@@ -209,5 +211,17 @@ class RecipesController extends Controller
             \DB::commit();
         }
         return redirect('/recipes')->with('mensaje', 'Cambio de Status de Recipe realizado satisfactoriamente');
+    }
+
+    public function verrecipe($id)
+    {
+        
+        if(!Auth::user()->hasPermissionTo('VerRecipe'))
+            abort(403, 'Permiso Denegado.');
+
+        $recipe = Recipe::findOrFail($id);
+        $medicines = Medicine::all();
+
+        return view('recipes.viewrecipe', ['recipe'=>$recipe, 'medicines'=>$medicines]);
     }
 }

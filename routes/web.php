@@ -32,11 +32,14 @@ Route::resource('/recipes', 'RecipesController');
 Route::get('/medicalrecords/create/{id}', 'MedicalRecordsController@create');
 Route::get('/recipes/create/{id}', 'RecipesController@create');
 
-
 Route::get('/patients','UsersController@patients'); //Ver pacientes Secretaria
 Route::get('/doctors','UsersController@doctors');
 
 Route::get('/myappointments', 'AppointmentsController@vermiscitas'); //VerMisCitas/Med/Pac
+
+Route::get('/recipes/{id}/verrecipe', 'RecipesController@verrecipe');
+
+Route::get('/medicalrecords/{id}/verhistoriamedica', 'MedicalRecordsController@verhistoriamedica');
 
 
 Route::get('/users/{id}/permissions','UsersController@permissions');
@@ -50,3 +53,4 @@ Route::put('/appointments/{id}/status', 'AppointmentsController@cambiarstatus');
 
 Route::get('/recipes/{id}/status', 'RecipesController@vistastatusrecipe');
 Route::put('/recipes/{id}/status', 'RecipesController@cambiarstatusrecipe');
+

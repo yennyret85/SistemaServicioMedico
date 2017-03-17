@@ -14,7 +14,7 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>Módulo Récipes</strong>
@@ -26,43 +26,52 @@
                                 <th>Fecha de Emisión</th>
                                 <th>Paciente</th>
                                 <th>Doctor</th>
-                                <th>Medicinas</th>
-                                <th>Indicaciones</th>
                                 <th>Status</th>
-                                <th width="10%" colspan="3">Acciones</th>
+                                <th width="10%" colspan="4">Acciones</th>
                             </tr>
 	                        @foreach($recipes as $recipe)
                             	<tr>
 	                            	<td>{{ $recipe->medicalrecord->appointment->appointment_date }}</td>
 	                            	<td>{{ $recipe->medicalrecord->appointment->patient->name." ".$recipe->medicalrecord->appointment->patient->lastname." | C.I. ".$recipe->medicalrecord->appointment->patient->idcard }}</td>
 	                            	<td>{{ $recipe->medicalrecord->appointment->doctor->name." ".$recipe->medicalrecord->appointment->doctor->lastname." (".$recipe->medicalrecord->appointment->doctor->specialty->name.")" }}</td>
-	                            	<td>{{ $recipe->medicines? join(', ', $recipe->medicines->pluck('name')->toArray()) : 'N/A'}}</td>
-	                            	<td>{{ $recipe->indications }}</td>
 	                            	<td>{{ $recipe->status }}</td>
-	                            	<td>
-		                            	@if(Auth::user()->hasPermissionTo('EditarRecipe'))
+                                    @if(Auth::user()->hasPermissionTo('VerRecipe'))
+                                        <td>
+                                            <a href="{{ url('/recipes/'.$recipe->id.'/verrecipe') }}" class="btn btn-success" title="Ver Recipe"><i class="fa fa-file-text"></i></a>
+                                        </td>
+                                    @else(Auth::user()->hasPermissionTo('VerRecipe'))
+                                        <td>
+                                            <button class="btn btn-success" title="Ver Recipe" disabled><i class="fa fa-file-text"></i></button>
+                                        </td>
+                                    @endif
+		                            @if(Auth::user()->hasPermissionTo('EditarRecipe'))
+                                        <td>
 		                            		<a href="{{ url('/recipes/'.$recipe->id.'/edit') }}" class="btn btn-primary" title="Modificar Recipe"><i class="fa fa-file-text-o"></i></a>
-		                                @endif
-		                            </td>
-		                            <td>
-		                            	@if(Auth::user()->hasPermissionTo('CambiarStatusRecipe'))
+                                        </td>
+		                            @endif
+		                            @if(Auth::user()->hasPermissionTo('CambiarStatusRecipe'))
+                                        <td>
 		                            		<a href="{{ url('recipes/'.$recipe->id.'/status') }}" class="btn btn-warning" title="Cambiar Status Recipe">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-		                                @endif
-		                            </td>
-		                            <td>
-		                            	@if(Auth::user()->hasRole('Administrador'))
+                                        <i class="fa fa-edit"></i></a>
+                                        </td>
+		                            @endif
+	                            	@if(Auth::user()->hasRole('Administrador'))
+                                        <td>
 			                            	<button class="btn btn-danger"
                                                 data-action="{{ url('/recipes/'.$recipe->id) }}"
                                                 data-name="{{ $recipe->id }}"
                                                 data-toggle="modal" data-target="#confirm-delete">
                                             <i class="fa fa-trash fa-1x"></i>
                                         </button>
-		                                @endif
-		                            </td>    
+                                        </td>    
+		                            @endif
                         		</tr>
 	                        @endforeach
+                            <tr>
+                                <td colspan="10" class="text-center">
+                                    {{ $recipes->links() }}
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>

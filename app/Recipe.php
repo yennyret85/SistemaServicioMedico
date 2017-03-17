@@ -3,13 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class Recipe extends Model
 {
-
-    use SoftDeletes;
 
     protected $fillable = [
     	'status', 'pharmacist_id', 'medicalrecord_id', 'indications'
@@ -26,5 +22,4 @@ class Recipe extends Model
     public function medicalrecord(){
         return $this->belongsTo('App\MedicalRecord', 'medicalrecord_id');
     }
-    
 }

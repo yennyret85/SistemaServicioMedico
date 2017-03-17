@@ -19,7 +19,6 @@ class CreateRecipesMedicinesTable extends Migration
             $table->integer('medicine_id')->unsigned();
             $table->foreign('medicine_id')->references('id')->on('medicines')->onDelete('cascade');
             $table->primary(['recipe_id', 'medicine_id']);
-            $table->softDeletes();
         });
     }
 

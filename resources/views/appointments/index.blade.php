@@ -14,7 +14,7 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>Módulo de Citas</strong>
@@ -32,10 +32,10 @@
                                 <th>Fecha</th>
                                 <th>Hora</th>
                                 <th>Paciente</th>
-                                <th>Medico</th>
+                                <th>Médico</th>
                                 <th>Especialidad</th>
                                 <th>Status</th>
-                                <th width="10%" colspan="3">Acciones</th>
+                                <th width="10%" colspan="5">Acciones</th>
                             </tr>
                             @foreach($appointments as $appointment)
                             <tr>
@@ -53,7 +53,25 @@
                                     </a>
                                 </td>
                                 @endif
-                                @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
+                                @if(Auth::user()->hasPermissionTo('CrearHistoriaMedica') && !$appointment->medicalrecord )
+                                    <td>
+                                        <a href="{{ url('/medicalrecords/create/'.$appointment->id) }}" class="btn btn-success" title="Crear Historia Médica"><i class="fa fa-h-square"></i></a>
+                                    </td>
+                                    @else
+                                    <td>
+                                        <button class="btn btn-success" title="Crear Historia Médica" disabled><i class="fa fa-h-square"></i></button>
+                                    </td>
+                                @endif
+                                @if(Auth::user()->hasPermissionTo('CrearRecipe') && $appointment->medicalrecord && !$appointment->medicalrecord->recipe)
+                                    <td>
+                                        <a href="{{ url('/recipes/create/'.$appointment->medicalrecord->id) }}" class="btn btn-primary" title="Crear Recipe"><i class="fa fa-file-text"></i></a>
+                                    </td>
+                                    @else
+                                    <td>
+                                        <button class="btn btn-info" title="Crear Recipe" disabled><i class="fa fa-file-text"></i></button>   
+                                    </td>
+                                @endif
+                                    @if(Auth::user()->hasPermissionTo('CambiarStatusCita'))
                                 <td>
                                     <a href="{{ url('appointments/'.$appointment->id.'/status') }}" class="btn btn-warning" title="Cambiar Status Cita">
                                         <i class="fa fa-edit"></i>
@@ -72,7 +90,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                                <td colspan="9" class="text-center">
+                                <td colspan="11" class="text-center">
                                     {{ $appointments->links() }}
                                 </td>
                             </tr>

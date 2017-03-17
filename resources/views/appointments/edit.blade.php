@@ -20,7 +20,8 @@
                 <div class="panel-heading">Cambiar Cita</div>
                 
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/appointments/'.$appointment->id) }}">
+                    <form class="form-horizontal" role="form" method="POST" 
+                    action="{{ url('/appointments/'.$appointment->id) }}">
                         {{ method_field('PUT') }}
                         {{ csrf_field() }}
 

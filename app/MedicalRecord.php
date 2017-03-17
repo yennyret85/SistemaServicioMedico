@@ -3,13 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class MedicalRecord extends Model
 {
-
-    use SoftDeletes;
     
     protected $table= "medicalrecords";
     
@@ -25,7 +21,6 @@ class MedicalRecord extends Model
     public function recipe()
     {
         return $this->hasOne('App\Recipe', 'medicalrecord_id');
-    }
-    
+    }    
 }
 
