@@ -13,7 +13,8 @@
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #38C2B9;
+                background-image: url("/img/background-welcome.jpg");
+                background-size: cover;
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
@@ -47,11 +48,15 @@
 
             .title {
                 font-size: 84px;
+                background: rgba(255,255,255,0.8);
+                padding: 0.25em 0.5em;
+                border-radius: 70px;
             }
 
             .links > a {
                 color: #636b6f;
-                padding: 0 25px;
+                background: rgba(255,255,255,0.8);
+                padding: 0.5em 1em;
                 font-size: 12px;
                 font-weight: 600;
                 letter-spacing: .1rem;

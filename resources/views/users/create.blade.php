@@ -181,7 +181,7 @@
                                 <label for="role" class="col-md-4 control-label">Rol</label>
 
                                 <div class="col-md-6">
-                                    <select name="role" id="role" class="form-control">
+                                    <select name="role" id="role" class="form-control" data-live-search="true">
                                         <option value="">Seleccione</option>
                                         @foreach($roles as $role)
                                             <option value="{{ $role->name }}" @if(old('role')==$role->name) selected @endif>
@@ -202,18 +202,12 @@
                             <label for="specialty" class="col-md-4 control-label">Especialidad</label>
 
                             <div class="col-md-6">
-                                <select name="specialty" id="specialty" class="form-control">
+                                <select name="specialty" id="specialty" class="form-control" data-live-search="true">
                                     <option value="">Seleccione</option>
                                     @foreach($specialties as $specialty)
-                                        <option value="{{ $specialty->id }}">
-                                        <!-- @if(old('specialty')==$specialty->name) selected @endif -->
+                                        <option value="{{ $specialty->id }}"
+                                        @if(old('specialty')==$specialty->id) selected @endif>
                                         {{ $specialty->name }}</option>
-                                    @endforeach
-
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->name }}" 
-                                        @if(old('role')==$role->name) selected @endif>
-                                        {{ $role->name }}</option>
                                     @endforeach
                                 </select>
 
